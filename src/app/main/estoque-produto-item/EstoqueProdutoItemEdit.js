@@ -319,7 +319,7 @@ export default function EstoqueProdutoItemEdit({ props, onChange, onChangeFields
                         </Grid>
                         <Grid item ref={refGrid} id="grid-xs-12" xs={isMobile ? 12 : 7}></Grid>
                         <Grid item xs={isMobile ? 12 : 7}>
-                            <CardImg props={control?._formValues?.qrCode?.url ? control?._formValues?.qrCode?.url : qrCodeBase64} />
+                            <CardImg props={qrCodeBase64} />
                         </Grid>
                         {
                             control?._formValues?.id && width > 0 && (
