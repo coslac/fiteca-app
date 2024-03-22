@@ -19,6 +19,7 @@ import CurrencyFormat from 'react-currency-format';
 import CanvasFile from './CanvasFile';
 import CardImg from './CardImg';
 import { useThemeMediaQuery } from '@fuse/hooks';
+import { authConfig } from '../../../auth_config.json';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -41,7 +42,7 @@ const item = {
     },
 };
 
-const appOrigin = getConfigAPI.APP_URL || `http://localhost:3000`;
+const appOrigin = authConfig?.appOrigin || `http://localhost:3000`;
 
 export default function EstoqueProdutoItemEdit({ props, onChange, onChangeFields, onChangeValues }) {
     const methods = useFormContext();

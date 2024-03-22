@@ -23,9 +23,10 @@ import authConfig from '../../../../src/auth_config.json';
 import { CircularProgress, Dialog } from '@mui/material';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import DisabledByDefaultOutlinedIcon from '@mui/icons-material/DisabledByDefaultOutlined';
+import { authConfig } from '../../../auth_config.json';
 
 const apiURL = getConfigAPI().API_URL;
-const appOrigin = getConfigAPI.APP_URL || `http://localhost:3000`;
+const appOrigin = authConfig?.appOrigin || `http://localhost:3000`;
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
