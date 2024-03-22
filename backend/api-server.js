@@ -59,6 +59,21 @@ const management = new ManagementClient({
   clientSecret: 'hbOWnx_sTnFKbp58-uuFCDA8vG4p7BLwEoX_rrfAl3jBT8K5YIenw911oMgNY3Lq',
 });
 
+app.get('/api/pedidos', async (req, res) => {
+  try {
+    const pedidos = await prisma.pedido.findMany();
+
+    if(!pedidos) {
+      return res.status(404).json({ error: 'Pedidos não encontrados' });
+    }
+
+    return res.status(200).json(pedidos);
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+});
+
 app.post('/api/pedido', async (req, res) => {
   try {
     const data = req.body;
