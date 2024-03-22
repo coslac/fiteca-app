@@ -1,0 +1,104 @@
+@import '../../base/bootstrap-extended/include'; // Bootstrap includes
+@import '../../base/components/include'; // Components includes
+.transaction-subheader-container{
+  display: flex;
+  justify-content: space-between;
+  background-color: aqua !important;
+}
+.transaction-subheader-display-flex{
+  display: flex;
+}
+.trasaction-subheader-text{
+  font-size: 12px;
+  color: $text-offwhite !important;
+  margin-right: 8px;
+}
+.transaction-subheader-data-container{
+  display: flex;
+  max-width: 75%;
+}
+.transaction-header-container{
+  display: flex;;
+  flex-direction: column;
+  color: $text-darker;
+}
+.transaction-header-path-title{
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+.transaction-header-title{
+  font-size: 28px;
+  color: $text-offwhite !important;
+  margin-bottom: 32px;
+}
+.transaction-column-dropdownToggle-right{
+  justify-content: right;
+}
+.transaction-modal-json-container{
+  max-width: 644px;
+  max-height: 634px;
+}
+.transaction-modal-json-header{
+  background-color: $bg-dark-400 !important;
+}
+.transaction-modal-json-title{
+  font-size: 28px;
+  margin-top: 24px;
+}
+.transaction-modal-json-sub-title{
+  margin-top: 12px;
+  margin-left: 24px;
+  color: $text-lighter !important;
+  font-weight: 600;
+}
+.transaction-modal-json-body-container{
+  background-color: $bg-dark-200 !important;
+  margin-top: 16px;
+  margin-left: 24px;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  border-radius: 5px;
+}
+.transaction-modal-json-footer{
+  margin: 24px;
+}
+.transaction-modal-logError-subheader-container{
+  display: flex;
+  background-color: $bg-dark-300 !important;
+  margin-left: 24px;
+  margin-right: 24px;
+}
+.transaction-modal-LogError-dateHour-text{
+  margin-left: 24px;
+  color: $text-lighter !important;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.transaction-modal-logError-log-test{
+  margin-left: 24px;
+  color: $text-lighter !important;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 64px;
+}
+.transaction-modal-logError-body-container{
+  background-color: $bg-dark-200 !important;
+  margin-left: 24px;
+  margin-right: 24px;
+  margin-bottom: 24px;
+}
+.transaction-modal-logError-body-text-container{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+}
+.transaction-modal-logError-body-text-date{
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 24px;
+}
+.transaction-modal-logError-body-errorText{
+  font-weight: 600;
+  font-size: 12px;
+}

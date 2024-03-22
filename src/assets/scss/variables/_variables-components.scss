@@ -1,0 +1,72 @@
+//  ================================================================================================
+//  ? TIP:  It is recommended to use this file for overriding component variables.
+//  ================================================================================================
+
+//  ------------------------------
+//    Navbar
+//  ------------------------------
+$navbar-height: 5.313rem !default;
+$horizontal-menu-height: 4.45rem !default;
+$footer-height: 5.35rem !default;
+$navbar-bg-color: $bg-dark-400 !default;
+
+//  ------------------------------
+//    Main Menu
+//  ------------------------------
+
+//main menu dark
+$menu-dark-color: #dcdcdc !default;
+$menu-dark-bg-color: $bg-dark-200 !default;
+$menu-dark-bg-overlay: rgba(14, 14, 18, 0.8) !default;
+$menu-dark-bg-filter: blur(90px) !default;
+
+//Body
+$theme-dark-body-bg: $bg-dark-500 !default;
+$theme-dark-body-color: #b4b7bd !default;
+$theme-dark-border-color: #3b4253 !default;
+$theme-dark-custom-control-border-color: #44405e !default;
+
+//Input
+$theme-dark-input-bg: $bg-dark-300 !default;
+$theme-dark-input-placeholder-color: #3e4859 !default;
+$theme-dark-input-border-color: $bg-dark-200 !default;
+$theme-dark-input-disabled-bg: #24233a !default;
+$theme-dark-input-disabled-border-color: #444b60 !default;
+
+//Typography
+$theme-dark-headings-color: #d0d2d6 !default;
+$theme-dark-label-color: #d0d2d6 !default;
+$theme-dark-text-muted-color: #676d7d !default;
+
+//Card
+$theme-dark-card-bg: $bg-dark-300 !default;
+$theme-dark-box-shadow: unset !important;
+
+//Input
+$theme-dark-input-bg: #283046 !default;
+$theme-dark-input-placeholder-color: #676d7d !default;
+$theme-dark-input-border-color: #404656 !default;
+
+// Switch
+$theme-dark-switch-bg: #545a6a;
+$theme-dark-switch-bg-disabled: #1b2337;
+
+//Table
+$theme-dark-table-bg: #283046 !default;
+$theme-dark-table-header-bg: #343d55 !default;
+$theme-dark-table-row-bg: #283046 !default;
+$theme-dark-table-hover-bg: #242b3d !default;
+$theme-dark-table-striped-bg: #242b3d !default;
+
+//Sairu`s changes`
+$theme-dark-table-header-bg: #1c1c24 !important;
+$theme-dark-border-color: #1c1c24;
+$theme-dark-table-bg: #24242e;
+$theme-dark-border-color: #1c1c24 !default;
+
+$theme-dark-modal-header-bg: #161d31 !default;
+$theme-dark-pagination-bg: #242b3d !default;
+$theme-dark-chart-bg: #384056 !default;
+$theme-dark-widget-bg: #384056 !default;
+
+$modal-backdrop-opacity: 0.8 !important;

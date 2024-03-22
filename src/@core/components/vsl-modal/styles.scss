@@ -1,0 +1,78 @@
+@import "../../../assets/scss/variables/variables";
+
+.modal-container {
+    padding: 24px;
+    background-color: $bg-dark-400 !important;
+}
+
+.modal-close-header {
+    color: $purple-400;
+    font-size: 16px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.modal-title-header {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 34px;
+    color: $text-offwhite;
+}
+
+.vsl-header-modal {
+    background-color: transparent !important;
+    padding: 0 !important;
+    & > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+}
+
+.vsl-footer-modal {
+    padding: 0 !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.vsl-cancel-button {
+    margin-right: 15px;
+    color: $text-white !important;
+}
+
+.vsl-backdrop {
+    background: rgba(14, 14, 18, 0.85) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+
+.vsl-body-modal {
+    margin-top: 40px;
+    padding: 0 !important;
+    overflow-y: unset !important;
+    background-color: transparent !important;
+}
+
+.vsl-footer-btns {
+    display: flex;
+}
+
+@supports not (backdrop-filter: none) {
+    .vsl-backdrop {
+        background: rgba(14, 14, 18, 0.8) !important;
+    }
+  }
+
+@supports (backdrop-filter: none) {
+	.vsl-backdrop {
+        background: rgba(14, 14, 18, 0.8) !important;
+        backdrop-filter: blur(8px);
+        opacity: 1 !important;
+    }
+}

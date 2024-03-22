@@ -1,0 +1,59 @@
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+#footer-container {
+  position: static;
+  bottom: 20px;
+  width: 100%;
+  align-items: center;
+  text-align: end;
+  display: flex;
+  padding: 10px 30px 0px 0px;
+  justify-content: space-between;
+
+  .footer-logo__container {
+    .footer-logo {
+      color: $text-footer;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 29px;
+      line-height: 35px;
+      .logo-bolder {
+        font-weight: 900 !important;
+      }
+    }
+  }
+
+  .footer-links {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    a.footer-link {
+      color: $bg-dark-100;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .footer-separator {
+      display: inline-block;
+      margin: 0px 12px;
+      color: $bg-dark-100;
+      transform: translate(0, -3px);
+    }
+  }
+}
+
+.container-footer-total {
+  position: relative;
+}
+
+.footer-auth-container {
+  width: 100%;
+}
+
+.footer-logo {
+  margin-right: 24px;
+}

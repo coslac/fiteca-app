@@ -1,0 +1,67 @@
+//  ================================================================================================
+//  ? TIP:  It is recommended to use this file for overriding bootstrap variables.
+//  ================================================================================================
+//  ------------------------------
+//    Fonts
+//  ------------------------------
+
+$font-family-sans-serif: "Public Sans", Helvetica, Arial, serif !default;
+$font-family-monospace: "Public Sans", Helvetica, Arial, serif !default;
+
+// ------------------------------
+//  CUSTOM VSL SCRIPTS COLORS
+// ------------------------------
+
+$gray: #7a7a7a !default;
+
+$bg-dark-500: #0e0e12 !default;
+$bg-dark-400: #16161e !default;
+$bg-dark-300: #1c1c24 !default;
+$bg-dark-200: #24242e !default;
+$bg-dark-100: #424253 !default;
+
+$purple: #5f2eea !default; //$primary
+$green: #4ea135 !default; //$success
+$blue: #157ee0 !default; //$info
+$orange: #e0a906 !default; //$warning
+$red: #ff4842 !default; //$danger
+
+$purple-500: #5f2eea !default;
+$purple-400: #8b61ff !default;
+$purple-300: #ad8fff !default;
+$purple-200: #cbb8ff !default;
+$purple-100: #eae0ff !default;
+
+$green-300: #74c85b !default;
+$green-200: #c6ffb4 !default;
+$green-100: #ddffd3 !default;
+
+$blue-300: #499eee !default;
+$blue-200: #91c3f2 !default;
+$blue-100: #cbe5f6 !default;
+
+$orange-300: #fac833 !default;
+$orange-200: #fcde83 !default;
+$orange-100: #f0efbc !default;
+
+$red-300: #ff706b !default;
+$red-200: #ff9c99 !default;
+$red-100: #ffd2cc !default;
+
+$text-lighter: #788ca0 !default;
+$text-darker: #3e4859 !default;
+$text-offwhite: #eef5f8 !default;
+$text-footer: #babfc7 !default;
+$text-white: #FFFFFF;
+$bg-switch: #34384b;
+
+$primary: $purple-400 !default;
+
+$gray-600: #7a7a7a !default; // $gray
+
+// ------------------------------
+//  CUSTOM DYNAMIC LIST COLORS
+// ------------------------------
+
+$tag-list-background: rgba(139, 97, 255, 0.2);
+$border-input: #7666f8;

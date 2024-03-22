@@ -1,0 +1,68 @@
+@import '../../../../assets/scss/variables/variables';
+
+.breadcrumb {
+  .breadcrumb-item + .breadcrumb-item {
+    &:before {
+      height: 20px;
+    }
+  }
+  &.breadcrumb {
+    .breadcrumb-item + .breadcrumb-item:before {
+      color: $text-darker !important;
+    }
+  }
+}
+
+/* Component Specific */
+.breadcrumb-slash {
+  &.breadcrumb {
+    .breadcrumb-item + .breadcrumb-item:before {
+      content: "/";
+    }
+  }
+}
+.breadcrumb-dots {
+  &.breadcrumb {
+    .breadcrumb-item + .breadcrumb-item:before {
+      content: ".";
+      position: relative;
+      top: -4px;
+    }
+  }
+}
+.breadcrumb-dashes {
+  &.breadcrumb {
+    .breadcrumb-item + .breadcrumb-item:before {
+      content: "-";
+    }
+  }
+}
+.breadcrumb-pipes {
+  &.breadcrumb {
+    .breadcrumb-item + .breadcrumb-item:before {
+      content: "|";
+    }
+  }
+}
+// padding left for header area breadcrumbs
+.content-header .breadcrumb {
+  padding-left: 1rem;
+}
+
+.content-header-title {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+}
+
+@media (max-width: 648px) {
+  .content-header .breadcrumb {
+    display: flex;
+    flex-direction: column;
+  }
+  .breadcrumbs-top {
+    .content-header-title {
+      display: contents !important;
+    }
+  }
+}

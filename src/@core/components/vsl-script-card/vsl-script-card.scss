@@ -1,0 +1,75 @@
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+.vsl-card-script-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 210px;
+  background-color: #1c1c24;
+  border-radius: 5px 5px;
+  margin-bottom: 51px;
+}
+
+.vsl-image-bg {
+  border-radius: 5px;
+  margin-top: -25px;
+  z-index: 1;
+  width: 80%;
+}
+
+.img-script-blur {
+  filter: blur(25px);
+  position: absolute;
+  left: 11px;
+  top: 17px;
+  z-index: 1;
+}
+
+.vsl-user-circle {
+  border-radius: 50px;
+  width: 48px;
+  height: 48px;
+  z-index: 5;
+  margin-top: -24px;
+}
+
+.vsl-image-container-card {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.vsl-name-script-card {
+  margin-top: 6px;
+}
+
+.vsl-category-on-fire {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.fire-icon {
+  margin-left: 7px;
+}
+
+.fire-color {
+  color: #ff706b;
+}
+
+.vsl-hr {
+  border-left: 2px solid #3e4859;
+  width: 1px;
+  height: 18px;
+  margin: 0px 8px;
+}
+
+.vsl-d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,107 @@
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+.card-script-alt-container {
+  width: 356px !important;
+  height: 229.88px !important;
+}
+.card-script-alt-image {
+  position: absolute;
+  top: -4.4em;
+  left: 12%;
+  right: 12%;
+}
+.card-avatar-alt {
+  border-radius: 50%;
+  margin-top: -30px;
+}
+
+.icone-script {
+  position: absolute;
+  right: 20px;
+  top: -2em;
+}
+
+.proj-card-footer {
+  background-color: $bg-dark-200 !important;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+}
+
+.vsl-card-script-container {
+  position: relative;
+  background-color: $theme-dark-card-bg;
+  width: 100%;
+  height: 216px;
+  border-radius: 5px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.vsl-script-img {
+  margin-top: -16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.vsl-image {
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.absolute-class {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card-button-edit {
+  margin-top: 16px;
+  margin-right: 6px;
+  padding: 0px 12px 0px 12px;
+  border-color: transparent;
+  background-color: transparent;
+
+  &:active {
+      opacity: 0.3;
+  }
+}
+
+.tooltip-card {
+  background-color: #16161E;
+}
+
+.side-lines {
+  border-left: 1px solid #3B4253;
+  border-right: 1px solid #3B4253;
+}

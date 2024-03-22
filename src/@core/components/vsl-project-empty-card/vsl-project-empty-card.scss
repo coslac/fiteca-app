@@ -1,0 +1,19 @@
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+.icone {
+  position: static;
+  width: 57.02px;
+  height: 57.02px;
+  left: 32px;
+  top: 32px;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin-right: 32px;
+}
+
+.empty-link-vsl {
+  color: #8B61FF !important;
+}

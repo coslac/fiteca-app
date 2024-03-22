@@ -1,0 +1,7 @@
+
+.loading-container {
+    padding-top: 50px;
+    min-height: 20vh;
+    display: flex;
+    justify-content: center;
+}

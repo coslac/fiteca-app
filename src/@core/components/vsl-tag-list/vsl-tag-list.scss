@@ -1,0 +1,71 @@
+// PASSAR PARA OS ARQIUVOS NO PADRAO, EU SO DEIXEI AQUI PQ EU ESTAVA
+// TESTANDO< VENDO SE CONSEGUIRIA FAZER.
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+.outer-list-input-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-weight: bold;
+  box-sizing: border-box;
+  max-height: 23.25em;
+}
+.inner-list-input-container {
+  border: 1px solid $bg-dark-200;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 6px;
+  max-height: 28.25em;
+  width: 100%;
+  margin-top: 0.5em;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  background: $bg-dark-300;
+  box-sizing: border-box;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 1;
+  margin: 0px 0px;
+}
+
+.list-item {
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  background: $tag-list-background;
+  border-radius: 17px;
+}
+.list-item .close {
+  height: 20px;
+  width: 20px;
+  color: $text-offwhite;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5em;
+  box-sizing: border-box;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.list-input {
+  flex-grow: 1;
+  padding: 0.5em 0;
+  border: none;
+  outline: none;
+  background: $bg-dark-300;
+  color: $text-offwhite;
+  box-sizing: border-box;
+}

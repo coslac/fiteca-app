@@ -1,0 +1,26 @@
+@import '../../base/bootstrap-extended/include'; // Bootstrap includes
+@import '../../base/components/include'; 
+@import '../../../../assets/scss/variables/variables';
+
+.script-generator-header{
+  display: flex;
+  margin-bottom: 32px;
+  align-items: center;
+  justify-content: space-between;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 240px;
+    background: linear-gradient(94.86deg, #0E0E12 0%, rgba(14, 14, 18, 0) 100%), rgba(139, 97, 255, 0.2);
+    z-index: -1;
+  }
+}
+
+.script-generator-title-container{
+  margin-left: 24px;
+  margin-top: 8px;
+}

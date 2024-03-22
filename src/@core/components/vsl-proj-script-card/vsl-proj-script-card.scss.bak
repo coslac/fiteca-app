@@ -1,0 +1,63 @@
+@import "@styles/base/bootstrap-extended/include"; // Bootstrap includes
+@import "@styles/base/components/include"; // Components includes
+
+.card-script-alt-container {
+  width: 356px !important;
+  height: 229.88px !important;
+}
+.card-script-alt-image {
+  position: absolute;
+  top: -4.4em;
+  left: 12%;
+  right: 12%;
+}
+.card-avatar-alt {
+  top: -2.69em !important;
+  left: 46%;
+  right:46%;
+}
+
+.icone-script {
+  position: absolute;
+  right: 20px;
+  top: -2em
+}
+
+.proj-card-footer {
+  background-color: $bg-dark-200 !important;
+  margin-bottom: -23px;
+  margin-left: -8px;
+  border-bottom-left-radius: 5px;
+
+  border-bottom-right-radius: 5px;
+
+div:nth-child(2)::after {
+    width: 29px;
+
+    height: 0px;
+    content: "";
+    position: absolute;
+
+    left: 28%;
+    top: 145px;
+
+    border: 1px solid $theme-dark-border-color !important;
+    transform: rotate(90deg) !important;
+    margin-right: 40px;
+  }
+
+div:nth-child(2)::before {
+
+    width: 29px;
+
+    height: 0px;
+    content: "";
+    position: absolute;
+
+    right: 8%;
+    top: 145px;
+    /* Vuexy/7) Border/Border */
+    border: 1px solid $theme-dark-border-color !important;
+    transform: rotate(90deg) !important;
+    margin-right: 40px;
+}}

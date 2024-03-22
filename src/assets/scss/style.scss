@@ -1,0 +1,385 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+// ------------------------------------
+// VSL Scripts Typography
+// ------------------------------------
+
+@import "../../@core/scss/base/bootstrap-extended/include"; // Bootstrap includes
+@import "../../@core/scss/base/components/include"; // Components includes
+
+// ** -----------------------
+// VSL - Design System
+// ** -----------------------
+
+.badge-status-site {
+  color: white;
+  border-radius: 2rem;
+  width: fit-content;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 1570px) {
+  .container-xxl.p-0.animate__animated.animate__fadeIn {
+    max-width: 1200px;
+  }
+
+  .header-navbar.navbar.align-items-center.floating-nav.container-xxl.navbar-shadow.navbar.navbar-expand-lg.navbar-dark {
+    max-width: 1200px !important;
+  }
+}
+
+#container-logo {
+  margin-left: 0.4rem !important;
+  margin-right: 0.4rem !important;
+}
+
+.disable-hover:hover {
+  background-color: #fff !important;
+  cursor: unset !important;
+}
+
+.float-left {
+  float: left !important;
+}
+.float-right {
+  float: right !important;
+}
+.col-md-9 {
+  flex: 0 0 auto;
+  max-width: 75%;
+}
+.col-md-3 {
+  flex: 0 0 auto;
+  max-width: 25%;
+}
+.collapse.show {
+  display: block !important;
+  visibility: visible;
+}
+.mt-32 {
+  margin-top: 3.2rem;
+}
+
+.mb-32 {
+  margin-bottom: 3.2rem;
+}
+
+body {
+  background-color: #f1f5f9 !important;
+}
+
+.badge-status-site {
+    color: white;
+    border-radius: 2rem;
+    width: fit-content;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+#logo-menu {
+  padding-left: 0.8rem !important;
+  padding-right: 0.8rem !important;
+  padding-top: 0.4rem !important;
+  padding-bottom: 0.4rem !important;
+  margin-left: 0.8rem !important;
+  margin-right: 0.8rem !important;
+  display: flex !important;
+  align-items: center !important;
+  border-radius: .4rem !important;
+
+  span {
+    margin-left: 0.4rem !important;
+    margin-right: 0.4rem !important;
+    line-height: 1.4 !important;
+    font-weight: normal !important;
+  }
+}
+.modal-backdrop.show {
+  //adiciona blur a todos os modais
+  background-color: rgba(14, 14, 18, 0.25);
+  opacity: 1 !important;
+  backdrop-filter: blur(14px);
+}
+
+.modal-step-header{
+  padding-top: 24px !important;
+}
+
+.modal-step-bg {
+  padding: 16px 24px 24px 24px !important;
+}
+
+* {
+  box-sizing: border-box;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.175;
+}
+
+h5 {
+  line-height: 1.6;
+}
+
+h6 {
+  line-height: 1.64;
+}
+
+label,
+a {
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0px;
+}
+
+.paragraph-lead {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.175;
+}
+
+.paragraph-lead-semi-bold {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.175;
+}
+
+.paragraph {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.paragraph-semi-bold {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.paragraph-bold {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.paragraph-small {
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.paragraph-small-semi-bold {
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.paragraph-small-bold {
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.deleted {
+  font-size: 14px;
+  line-height: 1.71;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.italicized {
+  font-size: 14px;
+  line-height: 1.71;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.underlined {
+  font-size: 14px;
+  line-height: 1.71;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.text-offwhite {
+  color: $text-offwhite !important;
+}
+
+.text-darker {
+  color: $text-darker !important;
+}
+
+.text-lighter {
+  color: $text-lighter !important;
+}
+
+.text-purple-400 {
+  color: $purple-400 !important;
+}
+
+.text-neutral-white {
+  color: $text-white;
+}
+
+.text-error {
+  color: $red;
+}
+
+.mb-8px {
+  margin-bottom: 8px;
+}
+
+.mb-4px {
+  margin-bottom: 4px;
+}
+
+// End - VSL Design System
+
+.menu-item {
+  letter-spacing: 0.4px;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+li.nav-item {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+li.nav-item.active {
+  z-index: 1;
+  .menu-item {
+    color: $primary !important;
+  }
+  svg {
+    color: $primary !important;
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-left: 4px solid $primary;
+    top: 25%;
+    height: 50%;
+  }
+}
+
+.main-menu.menu-dark .navigation > li.active > a {
+  background: transparent !important;
+  box-shadow: unset !important;
+}
+
+.main-menu.menu-dark .navigation > li ul .active {
+  background: transparent !important;
+  box-shadow: unset !important;
+}
+
+.collapse.show {
+  li.nav-item {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-left: 20px !important;
+    padding-left: 10px;
+  }
+}
+
+.navbar-header {
+  height: 115px !important;
+  display: grid;
+  align-items: center;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    border-bottom: 1px solid darken($text-darker, 15%);
+    width: 80%;
+    left: 10%;
+  }
+}
+
+.main-menu .main-menu-content {
+  height: calc(100% - #{$navbar-height} - 110px) !important;
+}
+
+.vsl-card-dashed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 32px;
+
+  background: $bg-dark-500;
+
+  border: 1px dashed $bg-dark-100;
+  width: fit-content;
+  border-radius: 5px;
+}
+
+.mb-100 {
+  margin-bottom: 100px;
+}
+
+.box-container {
+  height: 636px;
+  padding: 24px;
+  /* Background/Dark/400 */
+  background: #16161e;
+  border-radius: 5px;
+
+  box-sizing: border-box;
+}
+
+.input-group {
+  margin-top: 10px;
+  Label {
+    margin-right: 15px;
+  }
+  .radio-group {
+    Input {
+      margin-bottom: 15px;
+      margin-right: 10px;
+    }
+  }
+}
+
+nav.header-navbar.navbar {
+  max-width: 1224px !important;
+}
+
+.content-wrapper {
+  
+}

@@ -1,0 +1,21 @@
+@import '@styles/base/bootstrap-extended/include'; // Bootstrap includes
+@import '@styles/base/components/include'; // Components includes
+
+.welcome-text {
+  display: flex;
+  justify-content: space-between;  
+  //z-index: 999999 !important;
+  padding: 20px 0;
+  align-items: center;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 240px;
+    background: linear-gradient(94.86deg, #0E0E12 0%, rgba(14, 14, 18, 0) 100%), rgba(139, 97, 255, 0.2);
+    z-index: -1;
+  }
+}

@@ -1,0 +1,378 @@
+import { Fragment, useState, useEffect, useMemo } from "react";
+// ** Store & Actions
+import {
+  newSctCopy,
+  getMyScripts,
+  updateSctCopy,
+  getAllScript
+} from "@src/views/pages/vsl-client/home/store";
+import { useDispatch, useSelector } from "react-redux";
+
+import { useRTL } from "@hooks/useRTL";
+import Nouislider from "nouislider-react";
+import { useHistory, Link } from "react-router-dom";
+import "@styles/react/libs/noui-slider/noui-slider.scss";
+import { useTranslation } from "react-i18next";
+// ** Reactstrap Imports
+import {
+  Row,
+  Col,
+  Card,
+  Label,
+  Input,
+  Modal,
+  Button,
+  ModalBody,
+  ModalHeader,
+  FormFeedback,
+  ModalFooter,
+  Form,
+} from "reactstrap";
+// ** Third Party Components
+import Select from "react-select";
+import {Controller, useForm} from "react-hook-form";
+
+import {toast} from "react-toastify";
+// ** Utils
+import { selectThemeColors, todayDate } from "@utils";
+
+import AsyncSelect from "react-select/async";
+// ** Styles
+import "@styles/react/libs/react-select/_react-select.scss";
+
+const AddNewScript = ({ modal, setModal, id, data, edit, duplicate }) => {
+  const { t } = useTranslation();
+  const [itemOptions, setItemOptions] = useState([]);
+  const [videoVendas, setVideoVendas] = useState([]);
+  const [upsellPage, setUpsellPage] = useState([]);
+  const [downSellPage, setDownsellPage] = useState([]);
+  const [category, setCategory] = useState([]);
+  // ** Hooks
+  const history = useHistory();
+  const [scripts, setScripts] = useState([]);
+  const [isRtl] = useRTL();
+  const direction = isRtl === false ? "ltr" : "rtl";
+  const dispatch = useDispatch();
+  const store = useSelector((state) => state.dataHome);
+  const [value, setValue] = useState([]);
+  const [ppm, setPpm] = useState(["100"]);
+
+  const categorias = (el) => {
+    return {
+      value: el.id,
+      label: `${
+        el.gbl_usuario_by_usu_id_criacao
+          ? el.gbl_usuario_by_usu_id_criacao.nome + "   -   "
+          : ""
+      }  ${el.nome}`,
+    }
+  }
+
+  useEffect(() => {
+      store?.scripts.map((el) => {
+      if (el.le_lista_categoria === 2) {
+        setUpsellPage([
+          {
+          value: el.id,
+          label: `${
+            el.gbl_usuario_by_usu_id_criacao
+              ? el.gbl_usuario_by_usu_id_criacao.nome + "   -   "
+              : ""
+          }  ${el.nome}`,
+        }
+      ]
+        );
+      }
+      if (el.le_lista_categoria === 3) {
+        setDownsellPage([
+          {
+          value: el.id,
+          label: `${
+            el.gbl_usuario_by_usu_id_criacao
+              ? el.gbl_usuario_by_usu_id_criacao.nome + "   -   "
+              : ""
+          }  ${el.nome}`,
+        }
+      ]);
+      }
+      if (el.le_lista_categoria === 1) {
+        setVideoVendas([
+          {
+          value: el.id,
+          label: `${
+            el.gbl_usuario_by_usu_id_criacao
+              ? el.gbl_usuario_by_usu_id_criacao.nome + "   -   "
+              : ""
+          }  ${el.nome}`,
+        }
+      ]);
+      }
+    });
+
+
+    const vslOptions = [
+      {
+        label: "Video de vendas",
+        options: [...videoVendas],
+      },
+      {
+        label: "Página de Upsell",
+        options: [...upsellPage],
+      },
+      {
+        label: "Página de Downsell",
+        options: [...downSellPage],
+      },
+    ];
+    setItemOptions(vslOptions);
+  }, [scripts?.length, store?.scripts?.length, videoVendas.length]);
+
+  useEffect(() => {
+    dispatch(getMyScripts());
+    setScripts(store?.scripts);
+  }, [store?.scripts?.length, scripts?.length])
+
+  const formatGroupLabel = (data) => (
+    <div className="d-flex justify-content-between align-center">
+      <strong>
+        <span>{data.label}</span>
+      </strong>
+      <span>{data.options.length}</span>
+    </div>
+  );
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    reset,
+    register,
+    formState: { errors },
+    clearErrors,
+  } = useForm({
+    defaultValues: useMemo(() => {
+      if (!edit && !duplicate) {
+        return { nome: "" };
+      }
+      setPpm(data.ppm);
+      const scpt = store.scripts.filter((el) => el.id === data.scpt_id).map((el) => { 
+              return el.nome
+      });
+      setCategory({
+        value: data.scpt_id,
+        label: scpt.toLocaleString()
+      })
+
+      return {...data, scripts: category};
+    }, [data, store?.scripts?.length, category.length]),
+  });
+
+  function onSubmit(data) {
+    //setShow(false);
+    const resource = {
+      nome: data.nome,
+      scpt_id: data.scripts.value || category.value,
+      proj_id: id || data.proj_id,
+      ppm: ppm[0],
+      editado_em: todayDate(),
+    };
+
+    if (duplicate) {
+      dispatch(newSctCopy(resource)).then((result) => {
+        toast.success(t("Script duplicated successfully"));
+      });
+    }
+
+    if (!edit) {
+      dispatch(newSctCopy(resource)).then((result) => {
+        toast.success(t("Script created successfully"));
+      });
+    } else {
+      const script = {
+        ...resource,
+        id: data.id,
+      };
+      dispatch(updateSctCopy(script)).then((result) => {
+        toast.success(t("Script updated successfully"));
+      });
+    }
+
+    setModal(false);
+    reset();
+  }
+
+  const onDiscard = () => {
+    clearErrors();
+    setModal(false);
+    reset();
+  };
+
+  const filtro = itemOptions.map((el) => {
+    return el.options.value === data?.scpt_id;
+  });
+
+  function controlStylesHasError(invalid) {
+    return invalid ? "is-invalid" : "";
+  }
+  const condicional = edit || duplicate
+  return (
+    <Fragment>
+      <Modal
+        isOpen={modal}
+        onClosed={onDiscard}
+        toggle={() => setModal(!modal)}
+        className="modal-dialog-centered modal-sm"
+      >
+        <ModalHeader className="bg-transparent" toggle={() => setModal(!modal)}>
+          {duplicate ? (
+            <h1 className="text-offwhite">{t("Duplicate script")}</h1>
+          ) : (
+            <h1 className="address-title">
+              {edit ? t("Edit script") : t("Add script")}
+            </h1>
+          )}
+        </ModalHeader>
+        <ModalBody className="">
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Row>
+              <p className="address-subtitle">{t("Basic information")}</p>
+            </Row>
+            <Row className="mb-2">
+              <Label for="nome" className="me-2">
+                {t("Nome") + ":"}
+              </Label>
+              <Controller
+                id="nome"
+                name="nome"
+                control={control}
+                {...register("nome", { required: true })}
+                render={({ field }) => (
+                  <Input
+                    type="text"
+                    name="nome"
+                    className="input-script"
+                    placeholder={t("Type here...")}
+                    invalid={errors.nome && true}
+                    {...field}
+                  />
+                )}
+              />
+              {errors.nome && (
+                <FormFeedback>{t("Name is required")}</FormFeedback>
+              )}
+            </Row>
+            <Label className="form-label me-2" for="scripts">
+              {t("My scripts")}
+            </Label>
+            {itemOptions && category && (
+              <Controller
+                id="scripts"
+                name="scripts"
+                control={control}
+                {...register("scripts", { required: !condicional })}
+                render={({ field: { onChange, value } }) => (
+                  <Select
+                    id="scripts"
+                    theme={selectThemeColors}
+                    className={`react-select react-script-select ${controlStylesHasError(
+                      errors.scripts
+                    )}`}
+                    isDisabled={edit || duplicate}
+                    classNamePrefix="select"
+                    defaultValue={category}
+                    options={itemOptions}
+                    formatGroupLabel={formatGroupLabel}
+                    onChange={(e) => {
+                      onChange(e);
+                    }}
+                    invalid={errors.scripts && true}
+                  />
+                )}
+              />
+            )}
+            {errors.scripts && (
+              <FormFeedback>{t("Select is required")}</FormFeedback>
+            )}
+            <Row>
+              <p className="address-subtitle mt-3 mb-2 me-4">
+                {t("Aditional configuration")}
+              </p>
+            </Row>
+            <Row className="mb-2">
+              <Label className="form-label" for="scripts">
+                {t("Words per minute")}
+              </Label>
+              <Nouislider
+                step={50}
+                start={ppm}
+                tooltips={true}
+                className="nouislider"
+                direction={direction}
+                onChange={(e) => setPpm(e)}
+                range={{
+                  min: 100,
+                  max: 200,
+                }}
+                pips={{
+                  mode: "steps",
+                  stepped: true,
+                  density: 50,
+                }}
+              />
+            </Row>
+            <Row className="mt-5">
+              {duplicate ? (
+                <Col className="text-end">
+                  <Button
+                    type="reset"
+                    className="mt-2 mx-1 px-3"
+                    color="secondary"
+                    outline
+                    onClick={onDiscard}
+                  >
+                    {t("Cancel")}
+                  </Button>
+                  <Button type="submit" className="mt-2 px-3" color="primary">
+                    {t("Duplicate")}
+                  </Button>
+                </Col>
+              ) : edit ? (
+                <Col className="text-end">
+                  <Button
+                    type="reset"
+                    className="mt-2 mx-1 px-3"
+                    color="secondary"
+                    outline
+                    onClick={onDiscard}
+                  >
+                    {t("Cancel")}
+                  </Button>
+                  <Button type="submit" className="mt-2 px-3" color="primary">
+                    {t("Save")}
+                  </Button>
+                </Col>
+              ) : (
+                <Col className="text-end">
+                  <Button
+                    type="reset"
+                    className="mt-2 mx-1 px-3"
+                    color="secondary"
+                    outline
+                    onClick={onDiscard}
+                  >
+                    {t("Cancel")}
+                  </Button>
+                  <Button type="submit" className="mt-2 px-" color="primary">
+                    {t("Confirm")}
+                  </Button>
+                </Col>
+              )}
+            </Row>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </Fragment>
+  );
+};
+
+export default AddNewScript;

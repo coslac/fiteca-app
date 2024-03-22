@@ -1,0 +1,52 @@
+@import "/src/@core/scss/base/bootstrap-extended/include"; // Bootstrap includes
+@import "/src/@core/scss/base/components/include"; // Components includes
+.dropzone {
+  border: 1px dashed $border-input;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 170px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.dropzone-size {
+  height: 170px;
+}
+
+.dropzone-texts {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vsl-dropzone-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.vsl-top-8 {
+  margin-top: 8px;
+}
+
+.vsl-list-group {
+
+  & > li {
+    border: 1px solid #24242E;
+    background-color: transparent !important;
+  }
+}
+
+.file-name {
+  width: 170px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
