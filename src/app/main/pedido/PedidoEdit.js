@@ -17,7 +17,6 @@ import ColorPicker from 'app/shared-components/ColorPicker/ColorPicker';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import CanvasFile from './CanvasFile';
 import CardImg from './CardImg';
-import { useThemeMediaQuery } from '@fuse/hooks';
 import authConfig from '../../../auth_config.json';
 import Slide from '@mui/material/Slide';
 import OutlinedInput from '@mui/material/OutlinedInput';
