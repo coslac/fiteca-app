@@ -160,23 +160,6 @@ function Pedido() {
         return pedidoData;
     }
 
-    const updateFormValues = (response) => {
-        setItemEstoque(response.data);
-        setValue('id', response.data.id);
-        setValue('numTear', response.data?.numTear ? response.data?.numTear.toString() : 0);
-        setValue('tipoTear', response.data?.tipoTear);
-        setValue('numRolo', response.data?.numRolo ? response.data?.numRolo.toString() : 0);
-        setValue('metros', response.data?.metros ? response.data?.metros.toString() : 0);
-        setValue('revisor', response.data.revisor);
-        setValue('cliente', response.data?.cliente);
-        setValue('produto', response.data?.produto);
-        setValue('qrCode', response.data?.qrCode);
-        setValue('defeito', response.data?.defeito);
-        setValue('status', response.data?.status);
-        setValue('created_at', formatData(response.data?.created_at));
-        setValue('data', response.data?.data);
-    }
-
     const handleSave = () => {
          if (isEdit) {
             const data = formatDataObj(control._formValues);
