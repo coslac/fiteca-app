@@ -39,6 +39,7 @@ import { useDispatch } from 'react-redux';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import FuseLoading from '@fuse/core/FuseLoading';
 import FuseSuspense from '@fuse/core/FuseSuspense';
+import authConfig from '../../../auth_config.json';
 
 const apiURL = getConfigAPI().API_URL;
 
