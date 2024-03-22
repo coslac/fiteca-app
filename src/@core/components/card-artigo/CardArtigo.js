@@ -88,11 +88,11 @@ export default function CardArtigo({props, rolosSel}) {
 
     React.useEffect(() => {
         if(rolosSel && rolosSel?.length > 0) {
-            const idsRolosAux = [];
+            const rolosAux = [];
             for(let i = 0; i < rolosSel.length; i++) {
-                idsRolosAux.push(rolosSel.rolo_id)
+                rolosAux.push(rolosSel?.rolo)
             }
-            setIdsRolosSelected(idsRolosAux);
+            setRolosSelected(rolosAux);
         }
     }, [rolosSel]);
 
