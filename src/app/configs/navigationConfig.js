@@ -39,6 +39,21 @@ const navigationConfig = [
     ],
   },
   {
+    id: 'gestao-de-pedidos',
+    title: 'Gestão de Pedidos',
+    subtitle: 'Gerenciamento de Pedidos',
+    type: 'group',
+    children: [
+      {
+        id: 'pedidos',
+        title: 'Pedidos',
+        type: 'item',
+        icon: 'heroicons-outline:archive-box',
+        url: '/pedidos',
+      },
+    ],
+  },
+  {
     id: 'area-usuario',
     title: 'Área do Usuário',
     subtitle: 'Gerenciamento de Conta do Usuário',
