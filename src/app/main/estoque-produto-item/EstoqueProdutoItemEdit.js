@@ -74,10 +74,10 @@ export default function EstoqueProdutoItemEdit({ props, onChange, onChangeFields
             const urlBase64 = await generateQRCode();
             setQrCodeBase64(urlBase64);
         }
-        if(control?._formValues) {
+        if(control?._formValues && control?._formValues?.produto?.id && control?._formValues?.id) {
             genQRCode();
         }
-      }, [control?._formValues]);
+      }, [control?._formValues?.produto?.id, control?._formValues?.id]);
 
     function genId() {
         return '_' + Math.random().toString(36).substr(2, 9);
@@ -319,7 +319,11 @@ export default function EstoqueProdutoItemEdit({ props, onChange, onChangeFields
                         </Grid>
                         <Grid item ref={refGrid} id="grid-xs-12" xs={isMobile ? 12 : 7}></Grid>
                         <Grid item xs={isMobile ? 12 : 7}>
-                            <CardImg props={qrCodeBase64} />
+                            {
+                                qrCodeBase64 !== '' && {
+                                    <CardImg props={qrCodeBase64} />
+                                }
+                            }
                         </Grid>
                         {
                             control?._formValues?.id && width > 0 && (
