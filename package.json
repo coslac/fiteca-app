@@ -28,6 +28,7 @@
         "@mui/x-data-grid": "6.9.1",
         "@mui/x-date-pickers": "6.9.1",
         "@prisma/client": "^5.3.1",
+        "@prisma/extension-accelerate": "^1.0.0",
         "@reduxjs/toolkit": "1.9.5",
         "@types/auth0": "^3.3.6",
         "@types/aws-sdk": "^2.7.0",

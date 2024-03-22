@@ -4,7 +4,8 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client/edge');
+const { withAccelerate } = require('@prisma/extension-accelerate');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -21,7 +22,7 @@ const authConfig = require('./auth_config.json');
 
 const { JSDOM } = jsdom;
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient().$extends(withAccelerate());
 
 const app = express();
 
@@ -101,7 +102,7 @@ app.get('/api/pedido/:id', async (req, res) => {
 
 app.get('/api/pedidos', async (req, res) => {
   try {
-    const pedidos = await prisma.pedido.findMany();
+    const pedidos = await prisma.pedido.findMany({cacheStrategy: { swr: 60, ttl: 60 },});
 
     if(!pedidos) {
       return res.status(404).json({ error: 'Pedidos não encontrados' });
@@ -222,6 +223,7 @@ app.get('/api/romaneio/artigo/:id/rolos', async (req, res) => {
           gt: 0,
         },
       },
+      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if (!rolos) {
@@ -249,7 +251,8 @@ app.get('/api/romaneio/artigos', async (req, res) => {
       },
       include: {
         estoque: true
-      }
+      },
+      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if(!artigos) {
@@ -548,7 +551,8 @@ app.get('/api/estoque', async (req, res) => {
             created_at: 'desc',
           },
         },
-      }
+      },
+      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if(produtos && produtos.length > 0) {
@@ -637,7 +641,9 @@ app.put('/api/produto/:id', async (req, res) => {
 
 app.get('/api/produtos', async (req, res) => {
   try {
-    const produtos = await prisma.produto.findMany();
+    const produtos = await prisma.produto.findMany({
+      cacheStrategy: { swr: 60, ttl: 60 },
+    });
 
     if(produtos && produtos.length > 0) {
       for(let i = 0; i < produtos.length; i++) {
