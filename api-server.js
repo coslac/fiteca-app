@@ -25,7 +25,7 @@ const prisma = new PrismaClient();
 
 const app = express();
 
-const appPort = process.env.SERVER_PORT || 3000;
+const appPort = process.env.APP_PORT || 3000;
 const appOrigin =
   process.env.REACT_APP_ORIGIN || authConfig.appOrigin || `http://localhost:${appPort}`;
 const apiOrigin = process.env.REACT_APP_API_ORIGIN || `http://localhost:4000`;
@@ -42,7 +42,7 @@ app.use(express.json({limit: '100mb'}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(morgan('dev'));
 app.use(helmet());
-app.use(cors({ origin: appOrigin }));
+app.use(cors({ origin: [appOrigin, 'http://localhost:3000', 'http://localhost:8000'] }));
 
 const checkJwt = auth({
   audience: authConfig.audience,

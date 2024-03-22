@@ -131,6 +131,7 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
         }
         if(control?._formValues) {
             genQRCode();
+            console.log('control?._formValuessssssssssss: ', control?._formValues)
             if(control?._formValues?.produtosPedido?.length > 0) {
                 const idsArtigosAux = [];
                 for(let i = 0; i < control?._formValues?.produtosPedido?.length; i++) {
