@@ -196,6 +196,7 @@
     "scripts": {
         "start": "npm-run-all --parallel spa api-server",
         "spa": "react-app-rewired start",
+        "start-api": "npm-run-all --parallel api-server:dev",
         "dev": "npm-run-all --parallel spa api-server:dev",
         "server": "node server.js",
         "server:dev": "nodemon --experimental-specifier-resolution=node server.js",
