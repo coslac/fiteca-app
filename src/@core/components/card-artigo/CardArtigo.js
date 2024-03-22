@@ -228,7 +228,7 @@ export default function CardArtigo({props, rolosSel}) {
                                         onChange={handleChangeRolos}
                                         value={rolosSelected}
                                         getOptionLabel={(option) => {
-                                            return option.numRolo;
+                                            return option?.numRolo;
                                         }}
                                         renderOption={(props, option) => (
                                             <Box key={option.id} value={option.id} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
