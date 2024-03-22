@@ -71,6 +71,18 @@ app.get('/api/pedido/:id', async (req, res) => {
         id: {
           equals: id
         }
+      },
+      include: {
+        produtosPedido: {
+          include: {
+            produto: true,
+            romaneio: {
+              include: {
+                rolo: true
+              }
+            }
+          }
+        }
       }
     });
 
