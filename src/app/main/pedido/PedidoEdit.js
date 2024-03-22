@@ -20,6 +20,7 @@ import CanvasFile from './CanvasFile';
 import CardImg from './CardImg';
 import { useThemeMediaQuery } from '@fuse/hooks';
 import authConfig from '../../../auth_config.json';
+import Slide from '@mui/material/Slide';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -42,6 +43,27 @@ const item = {
     },
 };
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const headCellsArtigos = [
+    {
+        id: 'artigo',
+        numeric: false,
+        disablePadding: false,
+        label: 'ARTIGO',
+        textAlign: 'left'
+    },
+    {
+        id: 'largura',
+        numeric: false,
+        disablePadding: true,
+        label: 'LARGURA',
+        textAlign: 'left'
+    }
+];
+
 const appOrigin = authConfig?.appOrigin || `http://localhost:3000`;
 
 export default function PedidoEdit({ props, onChange, onChangeFields, onChangeValues }) {
@@ -52,6 +74,7 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
     const { isValid, dirtyFields, errors, touchedFields } = formState;
     const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
     const [width, setWidth] = React.useState(0);
+    const [tabValue, setTabValue] = React.useState(0);
     const refGrid = React.useRef(null);
     const [isMobileParam, setIsMobileParam] = React.useState(isMobile);
     const [qrCodeBase64, setQrCodeBase64] = React.useState('');
@@ -162,10 +185,6 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
         const artigo = artigos?.find((item) => item.id === artigoAdd);
         console.log('artigo', artigo);
         if(artigo) {
-            setPedido({...pedido, produtosPedido: [...pedido.produtosPedido, {
-                produto: artigo,
-                romaneio: []
-            }]});
         }
 
         setOpen(false);
@@ -189,7 +208,10 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
             typeof value === 'string' ? value.split(',') : value,
           );
     }
-
+    
+    function handleTabChange(event, value) {
+        setTabValue(value);
+    }
     console.log('control formvalues', control._formValues)
     return (
         <>
