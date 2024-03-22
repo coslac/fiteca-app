@@ -23,7 +23,7 @@ function FooterLayout1(props) {
         }}
       >
         <Toolbar className="min-h-48 md:min-h-64 px-8 sm:px-12 py-0 flex items-center overflow-x-auto">
-          @ 2023 Hallon LAB - Todos os direitos reservados
+          @ 2023 Fiteca APP - Todos os direitos reservados
         </Toolbar>
       </AppBar>
     </ThemeProvider>
