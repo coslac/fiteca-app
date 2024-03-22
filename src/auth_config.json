@@ -3,7 +3,7 @@
   "clientId": "VM9kcbyv3wjyruGp0WeJlTmhCt7eXtqs",
   "audience": "https://fiteca-estoque-admin.us.auth0.com/api/v2/",
   "appOrigin": "https://fiteca.netlify.app",
-  "apiOrigin": "http://localhost:4000",
+  "apiOrigin": "https://fiteca-app.onrender.com",
   "awsAccessKeyId": "AKIAW3MEDYYX6XMMIYFS",
   "awsSecretKeyId": "vpSJ8+CdBrc397jZ1BV6JFwRlsJ5AKh922VV/DB8",
   "bucketName": "fiteca-dev",
