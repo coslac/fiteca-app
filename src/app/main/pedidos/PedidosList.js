@@ -444,6 +444,10 @@ export default function EnhancedTable() {
     function handleClickRow(rowId) {
         window.location.replace(`/pedido/${rowId}`);
     }
+
+    function handleClickAdd() {
+        window.location.replace('/pedido')
+    }
     return (
         <Box sx={{ width: '100%', padding: '2rem' }}>
             <Paper sx={{ width: '100%', mb: 2, padding: '2rem' }}>
@@ -451,7 +455,7 @@ export default function EnhancedTable() {
                     <FuseSuspense />
                 ) : (
                     <>
-                        <CustomizedTable columnsParam={headCells} data={rows} handleClickRow={handleClickRow} showSelectRow={false} showToolbar={false}/>
+                        <CustomizedTable handleClickAdd={handleClickAdd} columnsParam={headCells} data={rows} handleClickRow={handleClickRow} showSelectRow={false} showToolbar={true}/>
                     </>
                 )}
             </Paper>

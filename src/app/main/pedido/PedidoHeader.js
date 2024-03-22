@@ -23,6 +23,7 @@ import authConfig from '../../../../src/auth_config.json';
 import { CircularProgress, Dialog } from '@mui/material';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import DisabledByDefaultOutlinedIcon from '@mui/icons-material/DisabledByDefaultOutlined';
+import FuseSuspense from '@fuse/core/FuseSuspense';
 
 const apiURL = getConfigAPI().API_URL;
 const appOrigin = authConfig?.appOrigin || `http://localhost:8000`;
@@ -31,7 +32,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function PedidoHeader({props, isEditParam, isChangeForm, pedidoAddParam, handleSave}) {
+function PedidoHeader({props, isEditParam, isChangeForm, pedidoAddParam, handleSave, handleIsLoading}) {
     const dispatch = useDispatch();
     const theme = useTheme();
     const navigate = useNavigate();
@@ -314,12 +315,15 @@ function PedidoHeader({props, isEditParam, isChangeForm, pedidoAddParam, handleS
         try {
             console.log('pedidoAdd: ', pedidoAdd);
             //const data = formataDataObj(pedidoAdd);
+            setIsLoading(true);
+            handleIsLoading(true);
             const res = await axios.post(`${apiURL}/pedido`, {
                 ...pedidoAdd
             });
 
             console.log('res inventario: ', res);
-
+            setIsLoading(false);
+            handleIsLoading(false);
             if (res && res.status === 201) {
                 dispatch(
                     showMessage({
@@ -347,6 +351,8 @@ function PedidoHeader({props, isEditParam, isChangeForm, pedidoAddParam, handleS
                 );
             }
         } catch (err) {
+            setIsLoading(false);
+            handleIsLoading(false);
             console.log(err);
             dispatch(
                 showMessage({
@@ -375,134 +381,142 @@ function PedidoHeader({props, isEditParam, isChangeForm, pedidoAddParam, handleS
     }
 
     return (
-        <div className="mb-32 flex flex-col sm:flex-row flex-1 w-full items-center justify-between space-y-8 sm:space-y-0 px-24 md:px-32">
-            <div className="flex flex-col items-center sm:items-start space-y-8 sm:space-y-0 w-full sm:max-w-full min-w-0">
-                <motion.div
-                    initial={{ x: 20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1, transition: { delay: 0.3 } }}
-                >
-                    <Typography
-                        className="flex items-center sm:mb-12"
-                        component={Link}
-                        role="button"
-                        to="/pedidos"
-                        color="inherit"
-                    >
-                        <FuseSvgIcon size={20}>
-                            {theme.direction === 'ltr'
-                                ? 'heroicons-outline:arrow-sm-left'
-                                : 'heroicons-outline:arrow-sm-right'}
-                        </FuseSvgIcon>
-                        <span className="flex mx-4 font-medium">Pedidos</span>
-                    </Typography>
-                </motion.div>
-
-                <div className="flex items-center max-w-full">
-                    {/* <motion.div
-                        className="hidden sm:flex"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1, transition: { delay: 0.3 } }}
-                    >
-                        <img
-                            className="w-32 sm:w-48 rounded"
-                            src={ pedido?.logo ? pedido.logo : "assets/images/pedidos/page-pedido-icon.png" }
-                            alt={name}
-                        />
-                    </motion.div> */}
+        <>
+        {
+            isLoading ? (
+                <FuseSuspense />
+            ) : (
+                <div className="mb-32 flex flex-col sm:flex-row flex-1 w-full items-center justify-between space-y-8 sm:space-y-0 px-24 md:px-32">
+                <div className="flex flex-col items-center sm:items-start space-y-8 sm:space-y-0 w-full sm:max-w-full min-w-0">
                     <motion.div
-                        className="flex flex-col items-center sm:items-start min-w-0 mx-8 sm:mx-16"
-                        initial={{ x: -20 }}
-                        animate={{ x: 0, transition: { delay: 0.3 } }}
+                        initial={{ x: 20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1, transition: { delay: 0.3 } }}
                     >
-                        <Typography className="text-16 sm:text-20 truncate font-semibold">
-                            {titleEdit}
+                        <Typography
+                            className="flex items-center sm:mb-12"
+                            component={Link}
+                            role="button"
+                            to="/pedidos"
+                            color="inherit"
+                        >
+                            <FuseSvgIcon size={20}>
+                                {theme.direction === 'ltr'
+                                    ? 'heroicons-outline:arrow-sm-left'
+                                    : 'heroicons-outline:arrow-sm-right'}
+                            </FuseSvgIcon>
+                            <span className="flex mx-4 font-medium">Pedidos</span>
                         </Typography>
                     </motion.div>
+    
+                    <div className="flex items-center max-w-full">
+                        {/* <motion.div
+                            className="hidden sm:flex"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1, transition: { delay: 0.3 } }}
+                        >
+                            <img
+                                className="w-32 sm:w-48 rounded"
+                                src={ pedido?.logo ? pedido.logo : "assets/images/pedidos/page-pedido-icon.png" }
+                                alt={name}
+                            />
+                        </motion.div> */}
+                        <motion.div
+                            className="flex flex-col items-center sm:items-start min-w-0 mx-8 sm:mx-16"
+                            initial={{ x: -20 }}
+                            animate={{ x: 0, transition: { delay: 0.3 } }}
+                        >
+                            <Typography className="text-16 sm:text-20 truncate font-semibold">
+                                {titleEdit}
+                            </Typography>
+                        </motion.div>
+                    </div>
                 </div>
-            </div>
-            <motion.div
-                className="flex"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0, transition: { delay: 0.3 } }}
-            >
-                {isEdit ? (
-                    <>
-                        <Button
-                            className="whitespace-nowrap mx-4"
-                            variant="contained"
-                            color="secondary"
-                            //disabled={!isChange}
-                            startIcon={<SaveAltOutlined />}
-                            onClick={handleSave}
-                        >
-                            Salvar
-                        </Button>
-                        <Button
-                            className="whitespace-nowrap mx-4"
-                            variant="contained"
-                            color="warning"
-                            //disabled={!isChange}
-                            startIcon={<DisabledByDefaultOutlinedIcon />}
-                            onClick={handleBaixaEstoque}
-                        >
-                            Dar Baixa
-                        </Button>
-                        <Button
-                            className="whitespace-nowrap mx-4"
-                            variant="contained"
-                            color="error"
-                            onClick={handleClickOpen}
-                            startIcon={<FuseSvgIcon className="hidden sm:flex">heroicons-outline:trash</FuseSvgIcon>}
-                        >
-                            Excluir
-                        </Button>
-                    </>
-                ) : (
+                <motion.div
+                    className="flex"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0, transition: { delay: 0.3 } }}
+                >
+                    {isEdit ? (
                         <>
-                        <Button
-                            className="whitespace-nowrap mx-4"
-                            variant="contained"
-                            color="success"
-                            startIcon={!isLoading ? <Add /> : <CircularProgress size={20} />}
-                            onClick={handleCadastrar}
-                        >
-                            Cadastrar
-                        </Button>
+                            <Button
+                                className="whitespace-nowrap mx-4"
+                                variant="contained"
+                                color="secondary"
+                                //disabled={!isChange}
+                                startIcon={<SaveAltOutlined />}
+                                onClick={handleSave}
+                            >
+                                Salvar
+                            </Button>
+                            <Button
+                                className="whitespace-nowrap mx-4"
+                                variant="contained"
+                                color="warning"
+                                //disabled={!isChange}
+                                startIcon={<DisabledByDefaultOutlinedIcon />}
+                                onClick={handleBaixaEstoque}
+                            >
+                                Dar Baixa
+                            </Button>
+                            <Button
+                                className="whitespace-nowrap mx-4"
+                                variant="contained"
+                                color="error"
+                                onClick={handleClickOpen}
+                                startIcon={<FuseSvgIcon className="hidden sm:flex">heroicons-outline:trash</FuseSvgIcon>}
+                            >
+                                Excluir
+                            </Button>
                         </>
-                )}
-            </motion.div>
-            <Dialog
-                open={openBaixa}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={handleCloseBaixa}
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>Tem certeza que deseja dar baixa neste item?</DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleCloseBaixa}>Cancelar</Button>
-                    <Button onClick={darBaixa}>Sim</Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={open}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={handleClose}
-                aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>Tem certeza que deseja excluir o pedido?</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
-                        Ao excluir o pedido, você não poderá mais recuperá-lo.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancelar</Button>
-                    <Button onClick={handleExcluir}>Ok, excluir</Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+                    ) : (
+                            <>
+                            <Button
+                                className="whitespace-nowrap mx-4"
+                                variant="contained"
+                                color="success"
+                                startIcon={!isLoading ? <Add /> : <CircularProgress size={20} />}
+                                onClick={handleCadastrar}
+                            >
+                                Cadastrar
+                            </Button>
+                            </>
+                    )}
+                </motion.div>
+                <Dialog
+                    open={openBaixa}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleCloseBaixa}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>Tem certeza que deseja dar baixa neste item?</DialogTitle>
+                    <DialogActions>
+                        <Button onClick={handleCloseBaixa}>Cancelar</Button>
+                        <Button onClick={darBaixa}>Sim</Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>Tem certeza que deseja excluir o pedido?</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Ao excluir o pedido, você não poderá mais recuperá-lo.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancelar</Button>
+                        <Button onClick={handleExcluir}>Ok, excluir</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+            )
+        }
+        </>
     );
 }
 

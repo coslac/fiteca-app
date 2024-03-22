@@ -95,11 +95,11 @@ function EstoqueProdutoItemHeader({props, isEditParam, isChangeForm, itemEstoque
     async function handleExcluir() {
         try {
             setOpen(false);
-            const res = await axios.delete(`${apiURL}/itemEstoque/${itemEstoque.id}`);
+            const res = await axios.delete(`${apiURL}/estoque-produto/${idProduto}/item/${itemEstoque.id}`);
             if (res && res.status === 200) {
                 dispatch(
                     showMessage({
-                        message: 'Produto excluído com sucesso!',
+                        message: 'Item excluído com sucesso!',
                         autoHideDuration: 6000,
                         anchorOrigin: {
                         vertical: 'top',
@@ -108,11 +108,11 @@ function EstoqueProdutoItemHeader({props, isEditParam, isChangeForm, itemEstoque
                         variant: 'success'
                     })
                 );
-                navigate('/itemEstoques')
+                window.location.replace('/estoque')
             } else {
                 dispatch(
                     showMessage({
-                        message: 'Erro ao excluir Produto!',
+                        message: 'Erro ao excluir Item!',
                         autoHideDuration: 6000,
                         anchorOrigin: {
                         vertical: 'top',
@@ -126,7 +126,7 @@ function EstoqueProdutoItemHeader({props, isEditParam, isChangeForm, itemEstoque
             console.log(err);
             dispatch(
                 showMessage({
-                    message: 'Erro ao excluir Produto!',
+                    message: 'Erro ao excluir Item!',
                     autoHideDuration: 6000,
                     anchorOrigin: {
                     vertical: 'top',
@@ -539,10 +539,10 @@ function EstoqueProdutoItemHeader({props, isEditParam, isChangeForm, itemEstoque
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <DialogTitle>Tem certeza que deseja excluir o itemEstoque?</DialogTitle>
+                <DialogTitle>Tem certeza que deseja excluir este item?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        Ao excluir o itemEstoque, você não poderá mais recuperá-lo.
+                        Ao excluir este item, você não poderá mais recuperá-lo.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

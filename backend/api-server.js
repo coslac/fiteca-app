@@ -394,6 +394,48 @@ app.post('/api/item-estoque/:id/qrcode', async (req, res) => {
   }
 });
 
+app.delete('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
+  try {
+    const { idProduto, idItem } = req.params;
+
+    if (!idProduto || idProduto === '') {
+      return res.status(400).json({ error: 'idProduto is required' });
+    }
+
+    if (!idItem || idItem === '') {
+      return res.status(400).json({ error: 'idItem is required' });
+    }
+
+    const produto = await prisma.produto.findFirst({
+      where: { id: { equals: idProduto}},
+    });
+
+    if(!produto) return res.status(404).json({ error: 'Produto não encontrado' });
+
+    const itemEstoque = await prisma.produtoEstoque.findFirst({
+      where: { id: { equals: idItem }}
+    });
+
+    if (!itemEstoque) {
+      return res.status(404).json({ error: 'Item do estoque não encontrado' });
+    }
+
+    await prisma.produtoEstoque.delete({
+      where: {
+        id: {
+          idItem
+        }
+      }
+    });
+
+    return res.status(200).json({});
+    
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+});
+
 app.get('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
   try {
     const { idProduto, idItem } = req.params;

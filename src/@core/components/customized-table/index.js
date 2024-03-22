@@ -123,7 +123,7 @@ function EnhancedTableToolbar({handleClickAdd, titleParam}) {
                     </Tooltip>
                 ) : (
                     <>
-                        <Tooltip title="Cadastrar Estoque" onClick={handleClickAdd}>
+                        <Tooltip title={`Cadastrar ${title ? title : ''}`} onClick={handleClickAdd}>
                             <IconButton color='primary'>
                                 <AddCircleOutline />
                             </IconButton>
@@ -136,7 +136,7 @@ function EnhancedTableToolbar({handleClickAdd, titleParam}) {
                     </>
                 )} */}
                     <>
-                        <Tooltip title="Cadastrar Estoque" onClick={handleClickAdd}>
+                        <Tooltip title={`Cadastrar ${title ? title : ''}`} onClick={handleClickAdd}>
                             <IconButton color='primary'>
                                 <AddCircleOutline />
                             </IconButton>

@@ -204,11 +204,15 @@ function Pedido() {
         return `${momentDate} - ${momentTime}`;
     }
 
+    function handleIsLoading(value) {
+        setIsLoading(value);
+    }
+
     return(
         <FormProvider {...methods}>
         <FusePageCarded
-            header={<PedidoHeader props={pedido} handleSave={handleSave} pedidoAddParam={pedidoAdd} isEditParam={isEdit} isChangeForm={isChange} />}
-            content={isEdit ? <PedidoEdit props={pedido} onChange={onChange} handleSave={handleSave} /> : <PedidoAdd onChangeFields={onChange} pedidoParam={pedido} onChangeValues={onChangePedidoAdd} />}
+            header={<PedidoHeader handleIsLoading={handleIsLoading} props={pedido} handleSave={handleSave} pedidoAddParam={pedidoAdd} isEditParam={isEdit} isChangeForm={isChange} />}
+            content={isEdit ? <PedidoEdit props={pedido} onChange={onChange} handleSave={handleSave} /> : <PedidoAdd isLoad={isLoading} onChangeFields={onChange} pedidoParam={pedido} onChangeValues={onChangePedidoAdd} />}
             scroll={isMobile ? 'normal' : 'content'}
             className="mt-32"
         />

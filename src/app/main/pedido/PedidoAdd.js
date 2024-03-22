@@ -29,6 +29,7 @@ import InputLabel from '@mui/material/InputLabel';
 import CustomizedTable from 'src/@core/components/customized-table';
 import { textAlign } from '@mui/system';
 import { makeStyles } from 'tss-react/mui';
+import FuseSuspense from '@fuse/core/FuseSuspense';
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -97,7 +98,7 @@ const headCellsArtigos = [
     }
 ];
 
-export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam }) {
+export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam, isLoad }) {
     const [tabValue, setTabValue] = React.useState(0);
     const methods = useFormContext();
     const [pedido, setPedido] = React.useState(pedidoParam);
@@ -108,6 +109,7 @@ export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam 
     const [idsArtigosSelected, setIdsArtigosSelected] = React.useState([]);
     const [artigosSelected, setArtigosSelected] = React.useState([]);
     const [open, setOpen] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
     const [artigoAdd, setArtigoAdd] = React.useState('');
     const { isValid, dirtyFields, errors, touchedFields } = formState;
     const {
@@ -117,6 +119,10 @@ export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam 
     React.useEffect(() => {
         setPedido(pedidoParam);
     }, [pedidoParam]);
+
+    React.useEffect(() => {
+        setIsLoading(isLoad);
+    }, [isLoad]);
 
     React.useEffect(() => {
         if(control?._formValues?.produtosPedido && control?._formValues?.produtosPedido?.length > 0) {
@@ -236,7 +242,11 @@ export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam 
     }
     return (
         <>
-            <Tabs
+        {isLoading ? (
+            <FuseSuspense />
+        ) : (
+            <>
+<Tabs
                 value={tabValue}
                 onChange={handleTabChange}
                 indicatorColor="secondary"
@@ -529,6 +539,8 @@ export default function PedidoAdd({ onChangeFields, onChangeValues, pedidoParam 
                     <Button onClick={handleAddArtigo}>Adicionar</Button>
                 </DialogActions>
             </Dialog>
+            </>
+        )}
         </>
     );
 }
