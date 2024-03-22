@@ -109,7 +109,7 @@ function Pedido() {
                 setValue('valorTotal', response.data?.valorTotal);
                 setValue('status', response.data?.status);
                 setValue('produtosPedido', response.data?.produtosPedido);
-                setValue('created_at', response.data?.created_at);
+                setValue('created_at', formatData(response.data?.created_at));
             };
         }
 
@@ -197,6 +197,14 @@ function Pedido() {
                 }
             });
          }
+    }
+
+    function formatData(param) {
+        console.log("param data: ", param)
+        const dateTimeSplit = param.split(', ');
+        const momentDate = moment(dateTimeSplit[0], "DD/MM/YYYY").format('DD/MM/YYYY');
+        const momentTime = moment(dateTimeSplit[1], "HH:mm:ss").format('HH:mm');
+        return `${momentDate} - ${momentTime}`;
     }
 
     return(

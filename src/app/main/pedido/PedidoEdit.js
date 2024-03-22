@@ -60,7 +60,7 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
     const [artigosSelected, setArtigosSelected] = React.useState([]);
     const [open, setOpen] = React.useState(false);
     const [artigoAdd, setArtigoAdd] = React.useState('');
-    
+
     React.useEffect(() => {
         setWidth(refGrid.current.offsetWidth - 40);
       }, [refGrid.current]);
