@@ -422,14 +422,12 @@ app.delete('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
 
     await prisma.produtoEstoque.delete({
       where: {
-        id: {
-          idItem
-        }
+        id: idItem
       }
     });
 
     return res.status(200).json({});
-    
+
   } catch(err) {
     console.log(err);
     return res.status(500).json({ error: err });
