@@ -4,8 +4,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 const express = require('express');
-const { PrismaClient } = require('@prisma/client/edge');
-const { withAccelerate } = require('@prisma/extension-accelerate');
+const { PrismaClient } = require('@prisma/client');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -22,7 +21,7 @@ const authConfig = require('./auth_config.json');
 
 const { JSDOM } = jsdom;
 
-const prisma = new PrismaClient().$extends(withAccelerate());
+const prisma = new PrismaClient();
 
 const app = express();
 
