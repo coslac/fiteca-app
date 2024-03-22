@@ -120,15 +120,6 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
     const [open, setOpen] = React.useState(false);
     const [artigoAdd, setArtigoAdd] = React.useState('');
 
-    React.useEffect(() => {
-        setWidth(refGrid.current.offsetWidth - 40);
-      }, [refGrid.current]);
-
-      React.useEffect(() => {
-        setIsMobileParam(isMobile);
-        setWidth(refGrid.current.offsetWidth - 40);
-      }, [isMobile]);
-
       React.useEffect(() => {
         setIsMobileParam(isMobile);
       }, []);
