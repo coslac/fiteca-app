@@ -99,7 +99,7 @@
         "api-server": "node api-server.js",
         "api-server:dev": "nodemon --experimental-specifier-resolution=node api-server.js",
         "prod": "npm-run-all --parallel server api-server",
-        "build": "npm i && npx prisma db pull && npx prisma generate --no-engine",
+        "build": "npm i && npx prisma generate --no-engine",
         "test": "react-app-rewired test --env=node",
         "eject": "react-app-rewired eject",
         "build-docs": "babel-node --presets @babel/preset-env src/app/main/documentation/material-ui-components/build.js",
