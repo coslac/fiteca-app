@@ -131,8 +131,19 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
         }
         if(control?._formValues) {
             genQRCode();
+            if(control?._formValues?.produtosPedido?.length > 0) {
+                const idsArtigosAux = [];
+                for(let i = 0; i < control?._formValues?.produtosPedido?.length; i++) {
+                    idsArtigosAux.push(control._formValues.produtosPedido[i]?.produto?.id)
+                }
+                setIdsArtigosSelected(idsArtigosAux);
+            }
         }
       }, [control?._formValues]);
+
+      React.useEffect(() => {
+        handleOpenAddArtigo();
+    }, []);
 
     function genId() {
         return '_' + Math.random().toString(36).substr(2, 9);
