@@ -179,8 +179,6 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
         setOpen(true);
     }
 
-    console.log('pedido', pedidoParam)
-
     const handleChangeArtigos = (event) => {
         console.log('artigos', event);
         const {
