@@ -33,6 +33,31 @@ import CustomizedTable from 'src/@core/components/customized-table';
 import { textAlign } from '@mui/system';
 import { makeStyles } from 'tss-react/mui';
 
+const useStyles = makeStyles()((theme) => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
+    },
+    menu: {
+      width: 200,
+    },
+  }));
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 const apiURL = getConfigAPI().API_URL;
 
 const container = {
