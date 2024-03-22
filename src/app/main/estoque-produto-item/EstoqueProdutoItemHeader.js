@@ -340,7 +340,8 @@ function EstoqueProdutoItemHeader({props, isEditParam, isChangeForm, itemEstoque
                                     variant: 'success'
                                 })
                             );
-                            navigate(`/estoque/${idProduto}/item/${res.data.id}`)
+                            //navigate(`/estoque/${idProduto}/item/${res.data.id}`)
+                            window.location.open(`${window.location.hostname}/estoque/${idProduto}/item/${res.data.id}`)
                         } else {
                             dispatch(
                                 showMessage({
