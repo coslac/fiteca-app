@@ -101,7 +101,7 @@ app.get('/api/pedido/:id', async (req, res) => {
 
 app.get('/api/pedidos', async (req, res) => {
   try {
-    const pedidos = await prisma.pedido.findMany({cacheStrategy: { swr: 60, ttl: 60 },});
+    const pedidos = await prisma.pedido.findMany();
 
     if(!pedidos) {
       return res.status(404).json({ error: 'Pedidos não encontrados' });
@@ -222,7 +222,6 @@ app.get('/api/romaneio/artigo/:id/rolos', async (req, res) => {
           gt: 0,
         },
       },
-      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if (!rolos) {
@@ -251,7 +250,6 @@ app.get('/api/romaneio/artigos', async (req, res) => {
       include: {
         estoque: true
       },
-      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if(!artigos) {
@@ -551,7 +549,6 @@ app.get('/api/estoque', async (req, res) => {
           },
         },
       },
-      cacheStrategy: { swr: 60, ttl: 60 },
     });
 
     if(produtos && produtos.length > 0) {
@@ -640,9 +637,7 @@ app.put('/api/produto/:id', async (req, res) => {
 
 app.get('/api/produtos', async (req, res) => {
   try {
-    const produtos = await prisma.produto.findMany({
-      cacheStrategy: { swr: 60, ttl: 60 },
-    });
+    const produtos = await prisma.produto.findMany();
 
     if(produtos && produtos.length > 0) {
       for(let i = 0; i < produtos.length; i++) {
