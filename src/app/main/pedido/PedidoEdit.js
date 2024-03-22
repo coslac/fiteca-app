@@ -55,7 +55,12 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
     const refGrid = React.useRef(null);
     const [isMobileParam, setIsMobileParam] = React.useState(isMobile);
     const [qrCodeBase64, setQrCodeBase64] = React.useState('');
-
+    const [artigos, setArtigos] = React.useState([]);
+    const [idsArtigosSelected, setIdsArtigosSelected] = React.useState([]);
+    const [artigosSelected, setArtigosSelected] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [artigoAdd, setArtigoAdd] = React.useState('');
+    
     React.useEffect(() => {
         setWidth(refGrid.current.offsetWidth - 40);
       }, [refGrid.current]);
@@ -116,225 +121,373 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
         });
     }
 
+    const handleChangeCEP = async (cep) => {
+        try {
+            console.log('cep', cep);
+            cep = cep.replaceAll('_', '');
+            if(cep.length === 9) {
+                const cepConsulta = cep.replace('-', '');
+                console.log('cepConsulta', cepConsulta);
+                if(cepConsulta.length === 8) {
+                    const res = await axios.get(`https://brasilapi.com.br/api/cep/v2/${cepConsulta}`);
+                    console.log('res', res);
+                    if(res && res.status === 200) {
+                        setValue('endereco', res.data.street);
+                        setValue('bairro', res.data.neighborhood);
+                        setValue('cidade', res.data.city);
+                        setValue('estado', res.data.state);
+                    }
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleOpenAddArtigo = async () => {
+        try {
+            const res = await axios.get(`${apiURL}/romaneio/artigos`);
+            console.log('res artigos', res);
+
+            if(res && res.status === 200) {
+                setArtigos(res.data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleAddArtigo = async () => {
+        console.log('Add artigo: ', artigoAdd);
+        const artigo = artigos?.find((item) => item.id === artigoAdd);
+        console.log('artigo', artigo);
+        if(artigo) {
+            setPedido({...pedido, produtosPedido: [...pedido.produtosPedido, {
+                produto: artigo,
+                romaneio: []
+            }]});
+        }
+
+        setOpen(false);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    console.log('pedido', pedidoParam)
+
+    const handleChangeArtigos = (event) => {
+        console.log('artigos', event);
+        const {
+            target: { value },
+          } = event;
+          setIdsArtigosSelected(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+          );
+    }
+
     console.log('control formvalues', control._formValues)
     return (
         <>
+            <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                indicatorColor="secondary"
+                textColor="secondary"
+                variant="scrollable"
+                scrollButtons="auto"
+                classes={{ root: 'w-full h-64 border-b-1' }}
+            >
+                <Tab className="h-64" label="PRINCIPAL" />
+                <Tab className="h-64" label="ENDEREÇO" />
+                <Tab className="h-64" label="ROMANEIO" />
+            </Tabs>
             <div className="p-16 sm:p-24">
-                <div className={'mb-32'}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                        <FormLabel className="font-medium text-14" component="legend">
-                                            <b>{`ARTIGO: ${control?._formValues?.produto?.artigo ? control._formValues.produto.artigo : ''}`}</b>
-                                        </FormLabel>
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                        <FormLabel className="font-medium text-14" component="legend">
-                                            <b>{`LARGURA (m): ${control?._formValues?.produto?.largura ? control?._formValues?.produto?.largura : ''}`}</b>
-                                        </FormLabel>
-                        </Grid>
-                        <Grid item xs={12}></Grid>
-                        <Grid item xs={12}></Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="numRolo"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            Nº ROLO
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                placeholder='Nº ROLO'
-                                                autoFocus
-                                                id="numRolo"
-                                                variant="outlined"
-                                                fullWidth
-                                                type='number'
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="numTear"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            Nº TEAR
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                placeholder='Nº TEAR'
-                                                autoFocus
-                                                id="numTear"
-                                                variant="outlined"
-                                                fullWidth
-                                                type='number'
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="tipoTear"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            TIPO TEAR
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                placeholder='TIPO TEAR'
-                                                id="tipoTear"
-                                                variant="outlined"
-                                                fullWidth
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="metros"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            METROS (m)
-                                        </FormLabel>
-                                        <CurrencyFormat
-                                                {...field}
-                                                id='metros'
-                                                placeholder='METROS (m)'
-                                                customInput={TextField}
-                                                thousandSeparator={''}
-                                                decimalSeparator={'.'}
-                                                decimalScale={2}
-                                                fixedDecimalScale={true}
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="revisor"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            REVISOR
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                placeholder='REVISOR'
-                                                id="revisor"
-                                                variant="outlined"
-                                                fullWidth
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="cliente"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            CLIENTE
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                placeholder='CLIENTE'
-                                                id="cliente"
-                                                variant="outlined"
-                                                fullWidth
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                            <Controller
-                                name="created_at"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                        <FormLabel className="font-medium text-14" component="legend">
-                                            DATA
-                                        </FormLabel>
-                                        <TextField
-                                                {...field}
-                                                id="created_at"
-                                                variant="outlined"
-                                                fullWidth
-                                                disabled
-                                        />
-                                    </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
+            <div className={tabValue !== 0 ? 'hidden mb-32' : 'mb-32'}>
+                <Grid container spacing={2}>
+                        <Grid item xs={isMobile ? 12 : 6}>
                         <Controller
-                                name="status"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                    <FormLabel className="font-medium text-14" component="legend">
-                                        STATUS
-                                    </FormLabel>
-                                    <Select id="status" {...field} variant="outlined" fullWidth defaultValue="" value={field.value} defaultChecked displayEmpty
-                                    >
-                                        <MenuItem value='Em revisão'>Em revisão</MenuItem>
-                                        <MenuItem value='Em estoque'>Em estoque</MenuItem>
-                                    </Select>
+                            name="nome"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <TextField
+                                            {...field}
+                                            autoFocus
+                                            id="nome"
+                                            label="Cliente"
+                                            variant="outlined"
+                                            fullWidth
+                                    />
                                 </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 4}>
-                        <Controller
-                                name="defeito"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth>
-                                    <FormLabel className="font-medium text-14" component="legend">
-                                        DEFEITO DE PRODUÇÃO
-                                    </FormLabel>
-                                    <Select id="defeito" {...field} variant="outlined" fullWidth defaultValue={false} value={field.value} defaultChecked displayEmpty
-                                    >
-                                        <MenuItem value={false}>Não</MenuItem>
-                                        <MenuItem value={true}>Sim</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                )}
-                            />
-                        </Grid>
-                        <Grid item ref={refGrid} id="grid-xs-12" xs={isMobile ? 12 : 7}></Grid>
-                        <Grid item xs={isMobile ? 12 : 7}>
-                            <CardImg props={qrCodeBase64} />
-                        </Grid>
-                        {
-                            control?._formValues?.id && width > 0 && (
-                                <>
-                                    <Grid item xs={isMobile ? 12 : 7}>
-                                    <FormControl fullWidth>
-                                        <CanvasFile isMobile={isMobileParam} width={width} props={control?._formValues} />
-                                        </FormControl>
-                                    </Grid>
-                                </>
-                            )
-                        } 
+                            )}
+                        />
                     </Grid>
+                    <Grid item xs={isMobile ? 12 : 6}>
+                        <Controller
+                            name="cnpjCpf"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <TextField
+                                            {...field}
+                                            id="cnpjCpf"
+                                            label="CNPJ/CPF"
+                                            variant="outlined"
+                                            fullWidth
+                                    />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={isMobile ? 12 : 6}>
+                        <Controller
+                            name="inscEst"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <TextField
+                                            {...field}
+                                            id="inscEst"
+                                            label="Inscrição Estadual"
+                                            variant="outlined"
+                                            fullWidth
+                                    />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={isMobile ? 12 : 6}>
+                        <Controller
+                            name="tel"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <CurrencyFormat
+                                        {...field}
+                                        id='tel'
+                                        label="Telefone"
+                                        customInput={TextField}
+                                        format="(##) ####-####"
+                                        mask="_"
+                                        fullWidth
+                                    />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                    <FormControl fullWidth>
+                                    <FormLabel className="font-medium text-14" component="legend">
+                                        Artigos
+                                    </FormLabel>
+                                    <Select id="artigos" variant="outlined" fullWidth defaultValue="" value={idsArtigosSelected} defaultChecked displayEmpty multiple onChange={handleChangeArtigos}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) => {
+                                        console.log('selected', selected);
+                                        return selected.map((value) => {
+                                            const artigo = artigos?.find((item) => item.id === value);
+                                            return artigo?.artigo;
+                                        }).join(', ');
+                                    }}
+                                    MenuProps={MenuProps}>
+                                        {
+                                            artigos?.map((item, index) => (
+                                                <MenuItem key={`${item?.id}-${index}`} value={item?.id}>
+                                                    <Checkbox checked={idsArtigosSelected?.indexOf(item?.id) > -1} />
+                                                    <ListItemText primary={item?.artigo} />
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                    </Grid>
+                    <Grid item xs={12}>
+                    <CustomizedTable titleParam={''} columnsParam={headCellsArtigos} data={artigosSelected} showToolbar={false} showSelectRow={false} />
+                    </Grid>
+                </Grid>
+                </div>
+                <div className={tabValue !== 1 ? 'hidden mb-32' : 'mb-32'}>
+                    <Grid container spacing={2}>
+                    <Grid item xs={isMobile ? 12 : 4}>
+                        <Controller
+                            name="cep"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <CurrencyFormat
+                                            {...field}
+                                            id='cep'
+                                            label="CEP"
+                                            customInput={TextField}
+                                            format="#####-###"
+                                            mask="_"
+                                            fullWidth
+                                            onChange={(e) => {
+                                                console.log('e', e);
+                                                field.onChange(e);
+                                                handleChangeCEP(e.target.value);
+                                            }}
+                                        />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={6}></Grid>
+                    <Grid item xs={isMobile ? 10 : 5}>
+                        <Controller
+                            name="endereco"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <TextField
+                                            {...field}
+                                            id="endereco"
+                                            label="Endereço"
+                                            variant="outlined"
+                                            fullWidth
+                                    />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Controller
+                            name="numero"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <TextField
+                                            {...field}
+                                            id="numero"
+                                            label="Número"
+                                            variant="outlined"
+                                            fullWidth
+                                    />
+                                </FormControl>
+                            )}
+                        />
+                    </Grid>
+                    <Grid item xs={5}>
+                            <Controller
+                                name="complemento"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <TextField
+                                            {...field}
+                                            id="complemento"
+                                            label="Complemento"
+                                            variant="outlined"
+                                            fullWidth
+                                        />
+                                    </FormControl>
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Controller
+                                name="bairro"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <TextField
+                                            {...field}
+                                            id="bairro"
+                                            label="Bairro"
+                                            variant="outlined"
+                                            fullWidth
+                                        />
+                                    </FormControl>
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Controller
+                                name="cidade"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <TextField
+                                            {...field}
+                                            id="cidade"
+                                            label="Cidade"
+                                            variant="outlined"
+                                            fullWidth
+                                        />
+                                    </FormControl>
+                                )}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Controller
+                                name="estado"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <TextField
+                                            {...field}
+                                            id="estado"
+                                            label="Estado"
+                                            variant="outlined"
+                                            fullWidth
+                                        />
+                                    </FormControl>
+                                )}
+                            />
+                        </Grid>
+                    </Grid>                
+                </div>
+                <div className={tabValue !== 2 ? 'hidden mb-32' : 'mb-32'}>
+                    <Grid container spacing={2}>
+                        {
+                            control?._formValues?.produtosPedido?.map((item, index) => (
+                                <Grid key={`${item?.produto?.id}-${index}`} item xs={isMobile ? 12 : 6}>
+                                    <CardArtigo props={item?.produto} />
+                                </Grid>
+                            ))
+                        }
+                    </Grid>                
                 </div>
             </div>
+            <Dialog
+                open={open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+                aria-describedby="alert-dialog-slide-description"
+                fullWidth
+            >
+                <DialogTitle>ADICIONAR ARTIGO</DialogTitle>
+                <DialogContent>
+                <FormControl fullWidth>
+                                    <FormLabel className="font-medium text-14" component="legend">
+                                        ARTIGO
+                                    </FormLabel>
+                                    <Select id="artigo" variant="outlined" fullWidth defaultValue={''} value={artigoAdd} defaultChecked displayEmpty onChange={(event) => {
+                                        setArtigoAdd(event.target.value);
+                                    }}
+                                    >
+                                        <MenuItem value="">Selecione o Artigo...</MenuItem>
+                                        {
+                                            artigos?.map((item, index) => (
+                                                <MenuItem key={`${item?.id}-${index}`} value={item?.id}>{item?.artigo}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                    </FormControl>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancelar</Button>
+                    <Button onClick={handleAddArtigo}>Adicionar</Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }

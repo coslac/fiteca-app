@@ -90,22 +90,26 @@ function Pedido() {
 
     useEffect(() => {
         async function getPedido() {
-            const response = await axios.get(`${apiURL}/estoque-produto/${idProduto}/item/${idItem}`);
+            const response = await axios.get(`${apiURL}/pedido/${id}`);
             if (response && response.status === 200) {
                 setPedido(response.data);
                 setValue('id', response.data.id);
-                setValue('numTear', response.data?.numTear ? response.data?.numTear.toString() : 0);
-                setValue('tipoTear', response.data?.tipoTear);
-                setValue('numRolo', response.data?.numRolo ? response.data?.numRolo.toString() : 0);
-                setValue('metros', response.data?.metros ? response.data?.metros.toString() : 0);
-                setValue('revisor', response.data.revisor);
-                setValue('cliente', response.data?.cliente);
-                setValue('produto', response.data?.produto);
-                setValue('qrCode', response.data?.qrCode);
-                setValue('created_at', formatData(response.data?.created_at));
+                setValue('nome', response.data?.nome);
+                setValue('endereco', response.data?.endereco);
+                setValue('numero', response.data?.numero);
+                setValue('complemento', response.data?.complemento);
+                setValue('bairro', formatData(response.data?.bairro));
+                setValue('cidade', response.data?.cidade);
+                setValue('estado', response.data?.estado);
+                setValue('cep', response.data?.cep);
+                setValue('tel', response.data?.tel);
+                setValue('cnpjCpf', response.data?.cnpjCpf);
+                setValue('inscEst', response.data?.inscEst);
+                setValue('condPagamento', response.data?.condPagamento);
+                setValue('valorTotal', response.data?.valorTotal);
                 setValue('status', response.data?.status);
-                setValue('defeito', response.data?.defeito);
-                setValue('data', response.data?.data);
+                setValue('produtosPedido', response.data?.produtosPedido);
+                setValue('created_at', response.data?.created_at);
             };
         }
 

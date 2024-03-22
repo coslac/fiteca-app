@@ -59,6 +59,34 @@ const management = new ManagementClient({
   clientSecret: 'hbOWnx_sTnFKbp58-uuFCDA8vG4p7BLwEoX_rrfAl3jBT8K5YIenw911oMgNY3Lq',
 });
 
+app.get('/api/pedido/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id || id === '') {
+      return res.status(400).json({ error: 'id is required' });
+    }
+
+    const pedido = await prisma.pedido.findFirst({
+      where: {
+        id: {
+          equals: id
+        }
+      }
+    });
+
+    if(!pedido) {
+      return res.status(404).json({ error: 'Pedido não encontrado' });
+    }
+
+    pedido.created_at = pedido.created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+
+    return res.status(200).json(pedido);
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+});
+
 app.get('/api/pedidos', async (req, res) => {
   try {
     const pedidos = await prisma.pedido.findMany();
