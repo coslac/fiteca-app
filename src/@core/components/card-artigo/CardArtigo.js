@@ -90,7 +90,7 @@ export default function CardArtigo({props, rolosSel}) {
         if(rolosSel && rolosSel?.rolos?.length > 0) {
             const rolosAux = [];
             for(let i = 0; i < rolosSel.rolos.length; i++) {
-                rolosAux.push(rolosSel.rolos[i].rolo)
+                rolosAux.push(rolosSel.rolos[i]);
             }
             setRolosSelected(rolosAux);
         }
