@@ -507,7 +507,7 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
                         {
                             control?._formValues?.produtosPedido?.map((item, index) => (
                                 <Grid key={`${item?.produto?.id}-${index}`} item xs={isMobile ? 12 : 6}>
-                                    <CardArtigo props={item?.produto} />
+                                    <CardArtigo props={item?.produto} rolosSel={item?.romaneio} />
                                 </Grid>
                             ))
                         }

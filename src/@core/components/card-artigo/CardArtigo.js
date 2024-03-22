@@ -77,7 +77,7 @@ const ExpandMore = styled((props) => {
 
 const apiURL = getConfigAPI().API_URL;
 
-export default function CardArtigo({props}) {
+export default function CardArtigo({props, rolosSel}) {
     const [expanded, setExpanded] = React.useState(true);
     const [produto, setProduto] = React.useState(props);
     const [rolos, setRolos] = React.useState([]);
@@ -85,6 +85,16 @@ export default function CardArtigo({props}) {
     const [rolosSelected, setRolosSelected] = React.useState([]);
     const methods = useFormContext();
     const { control, setValue, formState, watch, getValues } = methods;
+
+    React.useEffect(() => {
+        if(rolosSel && rolosSel?.length > 0) {
+            const idsRolosAux = [];
+            for(let i = 0; i < rolosSel.length; i++) {
+                idsRolosAux.push(rolosSel.rolo_id)
+            }
+            setIdsRolosSelected(idsRolosAux);
+        }
+    }, [rolosSel]);
 
     React.useEffect(() => {
         setProduto(props);
