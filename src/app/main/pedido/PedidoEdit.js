@@ -9,18 +9,30 @@ import 'react-form-builder2/dist/app.css';
 import { Add, CheckCircle, CleaningServices, CloseOutlined, CreateOutlined, DoNotDisturb, Error, ErrorOutlineOutlined, HighlightOff, Label, PlusOne, Title } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import getConfigAPI from 'src/config';
-import { Autocomplete, Badge, Button, Card, CardContent, CardHeader, CardMedia, CircularProgress, Divider, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Select, Tab, Tabs, TextField } from '@mui/material';
+import { Autocomplete, Badge, Button, Card, CardContent, CardHeader, CardMedia, CircularProgress, Divider, FormControl, FormHelperText, FormLabel, Grid, MenuItem, Tab, Tabs, TextField, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { motion } from 'framer-motion';
 import { uuid } from 'uuidv4';
 import { Controller, useForm, useFormContext } from 'react-hook-form';
 import ColorPicker from 'app/shared-components/ColorPicker/ColorPicker';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import CurrencyFormat from 'react-currency-format';
 import CanvasFile from './CanvasFile';
 import CardImg from './CardImg';
 import { useThemeMediaQuery } from '@fuse/hooks';
 import authConfig from '../../../auth_config.json';
 import Slide from '@mui/material/Slide';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import CardArtigo from 'src/@core/components/card-artigo/CardArtigo';
+import CurrencyFormat from 'react-currency-format';
+import { useThemeMediaQuery } from '@fuse/hooks';
+import axios from 'axios';
+import ArtigoRomaneio from './ArtigoRomaneio';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import InputLabel from '@mui/material/InputLabel';
+import CustomizedTable from 'src/@core/components/customized-table';
+import { textAlign } from '@mui/system';
+import { makeStyles } from 'tss-react/mui';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -208,7 +220,7 @@ export default function PedidoEdit({ props, onChange, onChangeFields, onChangeVa
             typeof value === 'string' ? value.split(',') : value,
           );
     }
-    
+
     function handleTabChange(event, value) {
         setTabValue(value);
     }
