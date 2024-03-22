@@ -442,7 +442,7 @@ export default function EnhancedTable() {
     console.log('apiURL', apiURL);
 
     function handleClickRow(rowId) {
-        navigate(`/pedidos/${rowId}`);
+        navigate(`/pedido/${rowId}`);
     }
     return (
         <Box sx={{ width: '100%', padding: '2rem' }}>
