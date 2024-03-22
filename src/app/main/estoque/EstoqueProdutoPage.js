@@ -507,7 +507,7 @@ export default function ProdutoPageEdit({ props, onChange, onChangeFields, onCha
                                 render={({ field }) => (
                                     <FormControl fullWidth>
                                         <FormLabel className="font-medium text-14" component="legend">
-                                        {`TOTAL (m): ${field.value}`}
+                                        {`TOTAL EM ESTOQUE (m): ${field.value}`}
                                         </FormLabel>
                                     </FormControl>
                                 )}
