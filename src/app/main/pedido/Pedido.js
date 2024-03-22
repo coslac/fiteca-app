@@ -63,7 +63,9 @@ function Pedido() {
             condPagamento: '',
             valorTotal: 0,
             status: 'Em andamento',
-            produtosPedido: [],
+            produtosPedido: [{
+                romaneio: []
+            }],
             created_at: '',
         }
     });
