@@ -1,10 +1,11 @@
-const { useMemo, useEffect } = require("react");
+const { useMemo, useEffect, useState } = require("react");
 const { default: ProductionWidget } = require("./widgets/ProductionWidget");
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import axios from "axios";
 import getConfigAPI from 'src/config';
+import Grid from '@mui/material/Grid';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -50,30 +51,44 @@ const item = {
     show: { opacity: 1, y: 0 },
 };
 const Dashboard = () => {
-
+    const [dataDash, setDataDash] = useState([]);
     useEffect(() => {
         async function getDataWidgets() {
-            const res = await axios.get(`${apiURL}/dashboard/production`);
-            console.log('res: ', res);
+            try {
+                const res = await axios.get(`${apiURL}/dashboard/production`);
+                console.log('res: ', res);
+                if(res && res.status === 200) {
+                    setDataDash(res.data);
+                }
+            } catch(err) {
+                console.log(err)
+            }
         }
         getDataWidgets();
     }, []);
-    
+
     const widgets = [];
 
     return (
         <FusePageSimple
             content={
                 <motion.div
-                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 w-full p-24 md:p-32"
+                            className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-32 w-full p-24 md:p-32"
                             variants={container}
                             initial="hidden"
                             animate="show"
                         >
-                            <motion.div variants={item} className="sm:col-span-2 lg:col-span-1 ">
-                                <ProductionWidget props={dataWidget} />
-                            </motion.div>
-
+                            <Grid container spacing={2}>
+                            {
+                                dataDash?.map((data) => (
+                                    <Grid item xs={6}>
+                                    <motion.div variants={item} className="sm:col-span-2 lg:col-span-1 ">
+                                        <ProductionWidget props={data} />
+                                    </motion.div>
+                                    </Grid>
+                                ))
+                            }
+                            </Grid>
                         </motion.div>
             }
         />

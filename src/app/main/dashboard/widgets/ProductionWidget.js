@@ -42,7 +42,7 @@ function ProductionWidget({props}) {
     },
     xaxis: {
       type: 'category',
-      categories: data?.conversions?.labels,
+      categories: data?.productions?.labels,
     },
   };
 
@@ -53,7 +53,7 @@ function ProductionWidget({props}) {
           {` ${data?.artigo}`}
         </Typography>
         <div className="ml-8">
-          <Chip size="small" className="font-medium text-sm" label=" 30 dias" />
+          <Chip size="small" className="font-medium text-sm" label=" Últimos 30 dias" />
         </div>
       </div>
       <div className="flex flex-col lg:flex-row lg:items-center mx-24 mt-12">
@@ -76,7 +76,7 @@ function ProductionWidget({props}) {
       <div className="flex flex-col flex-auto h-80">
         <ReactApexChart
           options={chartOptions}
-          series={data?.conversions?.series}
+          series={data?.productions?.series}
           type={chartOptions.chart.type}
           height={chartOptions.chart.height}
         />

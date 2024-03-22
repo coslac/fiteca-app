@@ -9,6 +9,13 @@ i18next.addResourceBundle('ar', 'navigation', ar);
 
 const navigationConfig = [
   {
+    id: 'dashboard',
+    title: 'Dashboard',
+    type: 'item',
+    icon: 'heroicons-outline:view-list',
+    url: '/',
+  },
+  {
     id: 'gestao-de-produtos',
     title: 'Gestão de Produtos',
     subtitle: 'Gerenciamento de Produtos',

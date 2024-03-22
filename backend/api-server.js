@@ -18,6 +18,7 @@ const axios = require('axios');
 const { data } = require('jquery');
 const qs = require('qs');
 const authConfig = require('./auth_config.json');
+const { LegendToggle } = require('@mui/icons-material');
 
 const { JSDOM } = jsdom;
 
@@ -38,8 +39,8 @@ if (!authConfig.domain || !authConfig.audience || authConfig.audience === 'YOUR_
   process.exit();
 }
 
-app.use(express.json({limit: '100mb'}));
-app.use(express.urlencoded({limit: '100mb'}));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb' }));
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors({ origin: [appOrigin, 'http://localhost:3000', 'http://localhost:8000'] }));
@@ -86,14 +87,14 @@ app.get('/api/pedido/:id', async (req, res) => {
       }
     });
 
-    if(!pedido) {
+    if (!pedido) {
       return res.status(404).json({ error: 'Pedido não encontrado' });
     }
 
     pedido.created_at = pedido.created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
 
     return res.status(200).json(pedido);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({ error: err });
   }
@@ -103,16 +104,16 @@ app.get('/api/pedidos', async (req, res) => {
   try {
     const pedidos = await prisma.pedido.findMany();
 
-    if(!pedidos) {
+    if (!pedidos) {
       return res.status(404).json({ error: 'Pedidos não encontrados' });
     }
 
-    for(let i = 0; i < pedidos?.length; i++) {
+    for (let i = 0; i < pedidos?.length; i++) {
       pedidos[i].created_at = pedidos[i].created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     }
 
     return res.status(200).json(pedidos);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({ error: err });
   }
@@ -148,31 +149,31 @@ app.post('/api/pedido', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao cadastrar pedido' });
     }
 
-    if(data?.produtosPedido && data.produtosPedido.length > 0) {
-      for(let i = 0; i < data.produtosPedido.length; i++) {
+    if (data?.produtosPedido && data.produtosPedido.length > 0) {
+      for (let i = 0; i < data.produtosPedido.length; i++) {
         const produtoPedido = await prisma.produtoPedido.create({
           data: {
-            produto: { connect: {id: data.produtosPedido[i].produto.id}},
-            cliente: { connect: {id: pedido.id}}
+            produto: { connect: { id: data.produtosPedido[i].produto.id } },
+            cliente: { connect: { id: pedido.id } }
           }
         })
-        if(produtoPedido && data.produtosPedido[i]?.romaneio?.length > 0) {
-          for(let j = 0; j < data.produtosPedido[i].romaneio.length; j++) {
+        if (produtoPedido && data.produtosPedido[i]?.romaneio?.length > 0) {
+          for (let j = 0; j < data.produtosPedido[i].romaneio.length; j++) {
             const itemRomaneio = await prisma.itemRomaneio.create({
               data: {
                 metros: data.produtosPedido[i].romaneio[j]?.metros,
                 rolo: {
-                  connect: {id: data.produtosPedido[i].romaneio[j]?.rolo?.id}
+                  connect: { id: data.produtosPedido[i].romaneio[j]?.rolo?.id }
                 },
                 produtoPedido: {
-                  connect: {id: produtoPedido.id}
+                  connect: { id: produtoPedido.id }
                 }
               }
             });
 
-            if(itemRomaneio) {
+            if (itemRomaneio) {
               const rolo = await prisma.produtoEstoque.update({
-                where: { id: itemRomaneio.rolo_id},
+                where: { id: itemRomaneio.rolo_id },
                 data: {
                   ativo: false
                 }
@@ -184,7 +185,7 @@ app.post('/api/pedido', async (req, res) => {
     }
 
     pedido = await prisma.pedido.findFirst({
-      where: { id: { equals: pedido.id }},
+      where: { id: { equals: pedido.id } },
       include: {
         produtosPedido: {
           include: {
@@ -252,16 +253,16 @@ app.get('/api/romaneio/artigos', async (req, res) => {
       },
     });
 
-    if(!artigos) {
+    if (!artigos) {
       return res.status(404).json({ error: 'Artigos não encontrados' });
     }
 
-    if(artigos.length > 0) {
-      for(let i = 0; i < artigos.length; i++) {
+    if (artigos.length > 0) {
+      for (let i = 0; i < artigos.length; i++) {
         const produto = artigos[i];
-        if(produto?.estoque && produto.estoque.length > 0) {
+        if (produto?.estoque && produto.estoque.length > 0) {
           artigos[i].metrosTotal = 0;
-          for(let j = 0; j < produto.estoque.length; j++) {
+          for (let j = 0; j < produto.estoque.length; j++) {
             artigos[i].metrosTotal += artigos[i].estoque[j].metros;
             artigos[i].estoque[j].created_at = artigos[i].estoque[j].created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
           }
@@ -278,35 +279,96 @@ app.get('/api/romaneio/artigos', async (req, res) => {
 
 app.get('/api/dashboard/production', async (req, res) => {
   try {
-    const response = await prisma.produto.findMany({
+    console.log('lte: ', `${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-${new Date().getDate()}`);
+    console.log('gte: ', `${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-01`);
+    const produtosEstoqueMes = await prisma.produto.findMany({
       where: {
         estoque: {
           some: {
             created_at: {
-              lte: new Date(`${new Date().getFullYear}-${new Date().getMonth()}-${new Date().getDay()}`),
-              gte: new Date(`${new Date().getFullYear}-${new Date().getMonth()}-01`)
+              lte: new Date(`${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-${new Date().getDate()}`),
+              gte: new Date(`${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-01`)
             }
           }
         }
       },
       include: {
-        estoque: true
-      }
+        estoque: {
+          orderBy: {
+            created_at: 'asc'
+          }
+        }
+      },
     });
 
-    console.log('response dashboard: ', response);
+    console.log('response dashboard: ', produtosEstoqueMes);
 
-    if(!response) {
+    if (!produtosEstoqueMes) {
       return res.status(500).json({ error: 'Erro ao buscar dados' });
     }
 
-    return res.status(200).json(response);
+    const arrayAux = [];
+    for (let i = 0; i < produtosEstoqueMes?.length; i++) {
+      const produto = produtosEstoqueMes[i];
+      const objAux = {
+        artigo: produto?.artigo,
+        metrosTotal: 0,
+        productions: {
+          labels: [],
+          series: [
+            {
+              name: "Total (m)",
+              data: [
+              ]
+            }
+          ],
+        }
+      }
+      for (let j = 0; j < produto?.estoque?.length; j++) {
+        const produtoEstoque = produto.estoque[j];
+        if (objAux.productions.labels.length > 0) {
+          if (!objAux.productions.labels.includes(formatDate(produtoEstoque.created_at))) {
+            objAux.productions.labels.push(formatDate(produtoEstoque.created_at));
+            let total = 0;
+            for (let k = 0; k < produto.estoque.length; k++) {
+              const item = produto.estoque[k];
+              if (formatDate(item.created_at) === formatDate(produtoEstoque.created_at)) {
+                total += item.metros;
+              }
+            }
+            objAux.productions.series[0].data?.push(total);
+          }
+        } else {
+          objAux.productions.labels.push(formatDate(produtoEstoque.created_at));
+          let total = 0;
+          for (let k = 0; k < produto.estoque.length; k++) {
+            const item = produto.estoque[k];
+            if (formatDate(item.created_at) === formatDate(produtoEstoque.created_at)) {
+              total += item.metros;
+            }
+          }
+          objAux.productions.series[0].data.push(total);
+        }
+      }
+      let totalAux = 0;
+      for(let n = 0; n < objAux.productions.series[0].data?.length; n++) {
+        totalAux += objAux.productions.series[0].data[n];
+      }
 
-  } catch(err) {
+      objAux.metrosTotal = totalAux;
+      arrayAux.push(objAux);
+    }
+    return res.status(200).json(arrayAux);
+
+  } catch (err) {
     console.log(err);
     return res.status(500).json({ error: err });
   }
 });
+
+function formatDate(date) {
+  return `${date.getDate()}/${(date.getMonth() + 1) < 9 ? `0${(date.getMonth() + 1).toString()}` : (date.getMonth() + 1).toString()}/${date.getFullYear()}`;
+}
 
 app.put('/api/item-estoque/:id/baixa', async (req, res) => {
   try {
@@ -391,7 +453,7 @@ app.post('/api/item-estoque/:id/qrcode', async (req, res) => {
     }
 
     const itemEstoque = await prisma.produtoEstoque.findFirst({
-      where: { id: { equals: id }},
+      where: { id: { equals: id } },
       include: {
         produto: true,
         qrCode: true,
@@ -411,11 +473,11 @@ app.post('/api/item-estoque/:id/qrcode', async (req, res) => {
         tipo: data?.tipo,
         bucket: data?.bucket,
         region: data?.region,
-        produtoEstoque: { connect: { id: itemEstoque.id}},
+        produtoEstoque: { connect: { id: itemEstoque.id } },
       }
     });
 
-    if(!qrCode) return res.status(500).json({ error: 'Erro ao vincular QRCode' });
+    if (!qrCode) return res.status(500).json({ error: 'Erro ao vincular QRCode' });
 
     itemEstoque.qrCode = qrCode;
 
@@ -439,13 +501,13 @@ app.delete('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: idProduto}},
+      where: { id: { equals: idProduto } },
     });
 
-    if(!produto) return res.status(404).json({ error: 'Produto não encontrado' });
+    if (!produto) return res.status(404).json({ error: 'Produto não encontrado' });
 
     const itemEstoque = await prisma.produtoEstoque.findFirst({
-      where: { id: { equals: idItem }}
+      where: { id: { equals: idItem } }
     });
 
     if (!itemEstoque) {
@@ -460,7 +522,7 @@ app.delete('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
 
     return res.status(200).json({});
 
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({ error: err });
   }
@@ -479,13 +541,13 @@ app.get('/api/estoque-produto/:idProduto/item/:idItem', async (req, res) => {
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: idProduto}},
+      where: { id: { equals: idProduto } },
     });
 
-    if(!produto) return res.status(404).json({ error: 'Produto não encontrado' });
+    if (!produto) return res.status(404).json({ error: 'Produto não encontrado' });
 
     const itemEstoque = await prisma.produtoEstoque.findFirst({
-      where: { id: { equals: idItem }},
+      where: { id: { equals: idItem } },
       include: {
         qrCode: true,
         produto: true,
@@ -521,7 +583,7 @@ app.post('/api/estoque-produto/:id/item', async (req, res) => {
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: id }},
+      where: { id: { equals: id } },
     });
 
     if (!produto) {
@@ -568,12 +630,12 @@ app.post('/api/estoque-produto/:id/item', async (req, res) => {
 app.get('/api/estoque-produto/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    if(!id || id === '') {
+    if (!id || id === '') {
       return res.status(400).json({ error: 'id is required' });
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: id }},
+      where: { id: { equals: id } },
       include: {
         estoque: {
           where: {
@@ -586,7 +648,7 @@ app.get('/api/estoque-produto/:id', async (req, res) => {
       },
     });
 
-    if(!produto) {
+    if (!produto) {
       return res.status(404).json({ error: 'Produto não encontrado' });
     }
 
@@ -594,8 +656,8 @@ app.get('/api/estoque-produto/:id', async (req, res) => {
 
     produto.metrosTotal = 0;
 
-    if(produto?.estoque && produto.estoque.length > 0) {
-      for(let i = 0; i < produto.estoque.length; i++) {
+    if (produto?.estoque && produto.estoque.length > 0) {
+      for (let i = 0; i < produto.estoque.length; i++) {
         produto.metrosTotal += produto.estoque[i].metros;
         produto.estoque[i].created_at = produto.estoque[i].created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
       }
@@ -623,11 +685,11 @@ app.get('/api/estoque', async (req, res) => {
       },
     });
 
-    if(produtos && produtos.length > 0) {
-      for(let i = 0; i < produtos.length; i++) {
+    if (produtos && produtos.length > 0) {
+      for (let i = 0; i < produtos.length; i++) {
         produtos[i].metrosTotal = 0;
         produtos[i].largura = produtos[i]?.largura ? parseFloat(produtos[i].largura).toFixed(2) : '';
-        for(let j = 0; j < produtos[i].estoque.length; j++) {
+        for (let j = 0; j < produtos[i].estoque.length; j++) {
           produtos[i].metrosTotal += produtos[i].estoque[j].metros;
           produtos[i].estoque[j].created_at = produtos[i].estoque[j].created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
         }
@@ -652,10 +714,10 @@ app.get('/api/produto/:id', async (req, res) => {
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: id}}
+      where: { id: { equals: id } }
     });
 
-    if(!produto) return res.status(404).json({ error: 'Produto não encontrado' });
+    if (!produto) return res.status(404).json({ error: 'Produto não encontrado' });
 
     produto.largura = produto?.largura ? parseFloat(produto.largura).toFixed(2) : '';
 
@@ -677,12 +739,12 @@ app.put('/api/produto/:id', async (req, res) => {
     }
 
     const produto = await prisma.produto.findFirst({
-      where: { id: { equals: id}}
+      where: { id: { equals: id } }
     });
 
-    if(!produto) return res.status(404).json({ error: 'Produto não encontrado' });
+    if (!produto) return res.status(404).json({ error: 'Produto não encontrado' });
 
-    if(data?.largura && data.largura !== '') {
+    if (data?.largura && data.largura !== '') {
       data.largura = parseFloat(data.largura);
     }
 
@@ -696,7 +758,7 @@ app.put('/api/produto/:id', async (req, res) => {
       where: { id },
     });
 
-    if(!produtoUpdated) return res.status(500).json({ error: 'Erro ao atualizar produto' });
+    if (!produtoUpdated) return res.status(500).json({ error: 'Erro ao atualizar produto' });
 
     produtoUpdated.largura = produtoUpdated?.largura ? parseFloat(produtoUpdated.largura).toFixed(2) : '';
 
@@ -711,8 +773,8 @@ app.get('/api/produtos', async (req, res) => {
   try {
     const produtos = await prisma.produto.findMany();
 
-    if(produtos && produtos.length > 0) {
-      for(let i = 0; i < produtos.length; i++) {
+    if (produtos && produtos.length > 0) {
+      for (let i = 0; i < produtos.length; i++) {
         produtos[i].largura = produtos[i]?.largura ? parseFloat(produtos[i].largura).toFixed(2) : '';
       }
     }
@@ -729,7 +791,7 @@ app.post('/api/produto', async (req, res) => {
 
     if (!data || !data?.artigo || data?.artigo === '') return res.status(400).json({ error: 'artigo is required' });
 
-    if(data?.largura && data.largura !== '') {
+    if (data?.largura && data.largura !== '') {
       data.largura = data.largura.replace(',', '.');
       data.largura = parseFloat(data.largura);
     }
@@ -743,7 +805,7 @@ app.post('/api/produto', async (req, res) => {
       },
     });
 
-    if(!produto) return res.status(500).json({ error: 'Erro ao cadastrar produto' });
+    if (!produto) return res.status(500).json({ error: 'Erro ao cadastrar produto' });
 
     return res.status(201).json(produto);
 
@@ -780,8 +842,10 @@ app.post('/api/solicitacao/:id/checkout', async (req, res) => {
     const resp = await axios.post(`https://authsandbox.cieloecommerce.cielo.com.br/oauth2/token`, qs.stringify({
       grant_type: 'client_credentials'
     }), {
-      headers: { 'Authorization': 'Basic NzJlODBhZTEtNmNmNi00YmFjLWE4YjQtMTlkODM1MzNhMDdhOncwZ3pITVJDL2l4OTNnYnJaRGpDZEN4azlBNHo4YXRvV0ZNcXh6UGV2bU09',
-      'content-type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Authorization': 'Basic NzJlODBhZTEtNmNmNi00YmFjLWE4YjQtMTlkODM1MzNhMDdhOncwZ3pITVJDL2l4OTNnYnJaRGpDZEN4azlBNHo4YXRvV0ZNcXh6UGV2bU09',
+        'content-type': 'application/x-www-form-urlencoded'
+      },
     });
 
     const { access_token } = resp.data;
@@ -813,7 +877,7 @@ app.post('/api/solicitacao', async (req, res) => {
     }
 
     const dermoterapeuta = await prisma.dermoterapeuta.findFirst({
-      where: {user_auth0_id: { equals: userauth0id }}
+      where: { user_auth0_id: { equals: userauth0id } }
     });
 
     if (!dermoterapeuta) {
@@ -939,12 +1003,14 @@ app.post('/api/solicitacao/:id/pagamento', async (req, res) => {
     const resp = await axios.post(`https://authsandbox.cieloecommerce.cielo.com.br/oauth2/token`, qs.stringify({
       grant_type: 'client_credentials'
     }), {
-      headers: { 'Authorization': 'Basic NzJlODBhZTEtNmNmNi00YmFjLWE4YjQtMTlkODM1MzNhMDdhOncwZ3pITVJDL2l4OTNnYnJaRGpDZEN4azlBNHo4YXRvV0ZNcXh6UGV2bU09',
-      'content-type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Authorization': 'Basic NzJlODBhZTEtNmNmNi00YmFjLWE4YjQtMTlkODM1MzNhMDdhOncwZ3pITVJDL2l4OTNnYnJaRGpDZEN4azlBNHo4YXRvV0ZNcXh6UGV2bU09',
+        'content-type': 'application/x-www-form-urlencoded'
+      },
     });
 
     const { access_token } = resp.data;
-    
+
     const pagamento = await prisma.pagamento.create({
       data: {
         forma_pagamento: data?.pagamento,
@@ -971,7 +1037,7 @@ app.get('/api/pacientes', async (req, res) => {
     }
 
     const dermoterapeuta = await prisma.dermoterapeuta.findFirst({
-      where: {user_auth0_id: { equals: userauth0id }}
+      where: { user_auth0_id: { equals: userauth0id } }
     });
 
     if (!dermoterapeuta) {
@@ -1012,7 +1078,7 @@ app.get('/api/exames-pacientes', async (req, res) => {
     }
 
     const dermoterapeuta = await prisma.dermoterapeuta.findFirst({
-      where: {user_auth0_id: { equals: userauth0id }}
+      where: { user_auth0_id: { equals: userauth0id } }
     });
 
     if (!dermoterapeuta) {
@@ -1081,7 +1147,7 @@ app.get('/api/paciente/:id', async (req, res) => {
     }
 
     const dermoterapeuta = await prisma.dermoterapeuta.findFirst({
-      where: {user_auth0_id: { equals: userauth0id }}
+      where: { user_auth0_id: { equals: userauth0id } }
     });
 
     if (!dermoterapeuta) {
@@ -1250,7 +1316,7 @@ app.put('/api/paciente/:id', async (req, res) => {
 });
 
 app.post('/api/paciente', async (req, res) => {
-  try{
+  try {
     const { data, ficha } = req.body;
     const { userauth0id } = req.headers;
 
@@ -1259,7 +1325,7 @@ app.post('/api/paciente', async (req, res) => {
     }
 
     const dermoterapeuta = await prisma.dermoterapeuta.findFirst({
-      where: {user_auth0_id: { equals: userauth0id }}
+      where: { user_auth0_id: { equals: userauth0id } }
     });
 
     if (!dermoterapeuta) {
@@ -1514,9 +1580,9 @@ async function getPagamentoDetalhes(idSolicitacao) {
 }
 
 async function generateQRCode(linkContent) {
-  return new Promise((resolve, reject) => {  
-  try {
-    let qrCodeImg;
+  return new Promise((resolve, reject) => {
+    try {
+      let qrCodeImg;
       const { document } = new JSDOM('https://fiteca.com.br').window;
       const imgEl = document.createElement('img');
       imgEl.setAttribute('id', 'qrCodeImg');
@@ -1529,7 +1595,7 @@ async function generateQRCode(linkContent) {
           src: "https://i.ibb.co/PCxKNmv/fiteca-logo.jpg",
         }
       });
-  
+
       qrcode.getImage().then(image => {
         console.log('image qrCode: ', image);
         qrCodeImg = image;
@@ -1540,7 +1606,7 @@ async function generateQRCode(linkContent) {
       console.log(err);
       reject(err);
     }
-    });
+  });
 }
 
 const port = process.env.PORT || 4000;
