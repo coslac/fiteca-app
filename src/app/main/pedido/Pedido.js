@@ -81,7 +81,7 @@ function Pedido() {
             //canvas: document.getElementById("canvas"),
             content: "https://fiteca.com.br",
             width: 480,
-            //download: true,
+            //dload: true,
             image: document.getElementById("image"),
             logo: {
               src: "https://i.ibb.co/PCxKNmv/fiteca-logo.jpg",
@@ -183,7 +183,7 @@ function Pedido() {
             
             axios.put(`${apiURL}/item-estoque/${idItem}`, {...data}).then((response) => {
                 if (response && response.status === 200) {
-                    updateFormValues(response);
+              //      updateFormValues(response);
                     setIsChange(false);
                     dispatch(
                         showMessage({
