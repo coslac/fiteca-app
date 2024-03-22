@@ -19,7 +19,7 @@ import CurrencyFormat from 'react-currency-format';
 import CanvasFile from './CanvasFile';
 import CardImg from './CardImg';
 import { useThemeMediaQuery } from '@fuse/hooks';
-import { authConfig } from '../../../auth_config.json';
+import authConfig from '../../../auth_config.json';
 
 const apiURL = getConfigAPI().API_URL;
 
