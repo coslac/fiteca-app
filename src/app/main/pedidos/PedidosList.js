@@ -78,26 +78,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'artigo',
+        id: 'cliente',
         numeric: false,
         disablePadding: true,
-        label: 'ARTIGO',
+        label: 'CLIENTE',
         textAlign: 'left'
     },
     {
-        id: 'largura',
+        id: 'created_at',
         numeric: false,
         disablePadding: false,
-        label: 'LARGURA (m)',
+        label: 'DATA',
         textAlign: 'left'
-    },
-    {
-        id: 'metrosTotal',
-        numeric: false,
-        disablePadding: false,
-        label: 'TOTAL (m)',
-        textAlign: 'left'
-    },
+    }
 ];
 
 function EnhancedTableHead(props) {

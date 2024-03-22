@@ -67,6 +67,10 @@ app.get('/api/pedidos', async (req, res) => {
       return res.status(404).json({ error: 'Pedidos não encontrados' });
     }
 
+    for(let i = 0; i < pedidos?.length; i++) {
+      pedidos[i].created_at = pedidos[i].created_at.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    }
+
     return res.status(200).json(pedidos);
   } catch(err) {
     console.log(err);
