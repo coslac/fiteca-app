@@ -103,7 +103,7 @@ export default function CardArtigo({props, rolosSel}) {
     React.useEffect(() => {
         setProduto({...produto, romaneio: rolosSelected?.map((item) => {
             const romaneio = {
-                metros: item.metros,
+                metros: item?.metros,
                 rolo: item
             };
             return romaneio;
@@ -113,7 +113,7 @@ export default function CardArtigo({props, rolosSel}) {
             if(produtosPedido[i].produto.id === produto.id) {
                 produtosPedido[i].romaneio = rolosSelected?.map((item) => {
                     const romaneio = {
-                        metros: item.metros,
+                        metros: item?.metros,
                         rolo: item
                     };
                     return romaneio;
