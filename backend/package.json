@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": false,
     "main": "api-server.js",
-    "type": "module",
+    "type": "commonjs",
     "dependencies": {
         "@auth0/auth0-react": "^2.2.1",
         "@prisma/client": "^5.3.1",
