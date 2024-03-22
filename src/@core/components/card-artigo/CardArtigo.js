@@ -87,10 +87,10 @@ export default function CardArtigo({props, rolosSel}) {
     const { control, setValue, formState, watch, getValues } = methods;
 
     React.useEffect(() => {
-        if(rolosSel && rolosSel?.length > 0) {
+        if(rolosSel && rolosSel?.rolos?.length > 0) {
             const rolosAux = [];
-            for(let i = 0; i < rolosSel.length; i++) {
-                rolosAux.push(rolosSel?.rolo)
+            for(let i = 0; i < rolosSel.rolos.length; i++) {
+                rolosAux.push(rolosSel.rolos[i].rolo)
             }
             setRolosSelected(rolosAux);
         }

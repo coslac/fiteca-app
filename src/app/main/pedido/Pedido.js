@@ -64,6 +64,7 @@ function Pedido() {
             valorTotal: 0,
             status: 'Em andamento',
             produtosPedido: [],
+            romaneio: [],
             created_at: '',
         }
     });
@@ -108,6 +109,19 @@ function Pedido() {
                 setValue('condPagamento', response.data?.condPagamento);
                 setValue('valorTotal', response.data?.valorTotal);
                 setValue('status', response.data?.status);
+                if(response?.data?.produtosPedido?.length > 0) {
+                    const romaneioAux = [];
+                    for(let i = 0; i < response.data.produtosPedido.length; i++) {
+                        const romaneioObj = {};
+                        romaneioObj.produto = response.data.produtosPedido[i]?.produto;
+                        romaneioObj.rolos = [];
+                        for(let j = 0; j < response.data.produtosPedido[i]?.romaneio?.length; j++) {
+                            romaneioObj.rolos.push(response.data.produtosPedido[i].romaneio[j]?.rolo);
+                        }
+                        romaneioAux.push(romaneioObj);
+                    }
+                    setValue('romaneio', romaneioAux);
+                }
                 setValue('produtosPedido', response.data?.produtosPedido);
                 setValue('created_at', formatData(response.data?.created_at));
             };
