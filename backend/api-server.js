@@ -18,7 +18,6 @@ const axios = require('axios');
 const { data } = require('jquery');
 const qs = require('qs');
 const authConfig = require('./auth_config.json');
-const { LegendToggle } = require('@mui/icons-material');
 
 const { JSDOM } = jsdom;
 
@@ -279,26 +278,26 @@ app.get('/api/romaneio/artigos', async (req, res) => {
 
 app.get('/api/dashboard/production', async (req, res) => {
   try {
-    console.log('lte: ', `${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-${new Date().getDate()}`);
-    console.log('gte: ', `${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-01`);
+    const today = new Date();
+    let daysAgo30 = new Date(new Date().setDate(today.getDate() - 30));
+
+    console.log('lte: ', `${today.getFullYear()}-${(today.getMonth() + 1) < 9 ? `0${(today.getMonth() + 1).toString()}` : (today.getMonth() + 1).toString()}-${today.getDate()}`);
+    console.log('gte: ', `${daysAgo30.getFullYear()}-${(daysAgo30.getMonth() + 1) < 9 ? `0${(daysAgo30.getMonth() + 1).toString()}` : (daysAgo30.getMonth() + 1).toString()}-${daysAgo30.getDate()}`);
+
     const produtosEstoqueMes = await prisma.produto.findMany({
-      where: {
-        estoque: {
-          some: {
-            created_at: {
-              lte: new Date(`${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-${new Date().getDate()}`),
-              gte: new Date(`${new Date().getFullYear()}-${(new Date().getMonth() + 1) < 9 ? `0${(new Date().getMonth() + 1).toString()}` : (new Date().getMonth() + 1).toString()}-01`)
-            }
-          }
-        }
-      },
       include: {
         estoque: {
+          where: {
+            created_at: {
+              lte: today,
+              gte: daysAgo30
+            }
+          },
           orderBy: {
             created_at: 'asc'
           }
         }
-      },
+      }
     });
 
     console.log('response dashboard: ', produtosEstoqueMes);
@@ -307,38 +306,112 @@ app.get('/api/dashboard/production', async (req, res) => {
       return res.status(500).json({ error: 'Erro ao buscar dados' });
     }
 
-    const arrayAux = [];
-    for (let i = 0; i < produtosEstoqueMes?.length; i++) {
-      const produto = produtosEstoqueMes[i];
-      const objAux = {
-        artigo: produto?.artigo,
-        metrosTotal: 0,
-        productions: {
-          labels: [],
-          series: [
-            {
-              name: "Total (m)",
-              data: [
-              ]
+    const arrayAux = getDaysAgoProductions(produtosEstoqueMes);
+
+    daysAgo30 = new Date(new Date().setDate(today.getDate() - 31));
+    console.log('new days31Ago: ', daysAgo30);
+
+    const daysAgo60 = new Date(new Date().setDate(today.getDate() - 61));
+    console.log('60 DIAS ATRAS: ', daysAgo60);
+
+    const produtosEstoque60DaysAgo = await prisma.produto.findMany({
+      include: {
+        estoque: {
+          where: {
+            created_at: {
+              lte: daysAgo30,
+              gte: daysAgo60
             }
-          ],
+          },
+          orderBy: {
+            created_at: 'asc'
+          }
         }
       }
-      for (let j = 0; j < produto?.estoque?.length; j++) {
-        const produtoEstoque = produto.estoque[j];
-        if (objAux.productions.labels.length > 0) {
-          if (!objAux.productions.labels.includes(formatDate(produtoEstoque.created_at))) {
-            objAux.productions.labels.push(formatDate(produtoEstoque.created_at));
-            let total = 0;
-            for (let k = 0; k < produto.estoque.length; k++) {
-              const item = produto.estoque[k];
-              if (formatDate(item.created_at) === formatDate(produtoEstoque.created_at)) {
-                total += item.metros;
-              }
+    });
+
+    const arrayAux60DaysAgo = getDaysAgoProductions(produtosEstoque60DaysAgo);
+
+    for(let i = 0; i < arrayAux.length; i++) {
+      const produto = arrayAux[i];
+      for(let j = 0; j < arrayAux60DaysAgo.length; j++) {
+        const produto60 = arrayAux60DaysAgo[j];
+        if(produto.id === produto60.id) {
+          arrayAux[i].metrosTotal60DaysAgo = produto60.metrosTotal;
+          if(produto60.metrosTotal > 0) {
+            if(produto60.metrosTotal > produto.metrosTotal) {
+              produto.isPositive = false;
+              produto.isNeutral = false;
+              produto.icon = 'heroicons-solid:trending-down';
+              produto.classIcon = 'text-red-500';
+              produto.classPercentage = 'font-medium text-red-500';
+              produto.percentage = parseFloat((100 - calcPercentage(produto.metrosTotal, produto60.metrosTotal)).toFixed(2));
+            } else if(produto.metrosTotal > produto60.metrosTotal) {
+              produto.isPositive = true;
+              produto.isNeutral = false;
+              produto.percentage = parseFloat((100 - calcPercentage(produto60.metrosTotal, produto.metrosTotal)).toFixed(2));
+              produto.icon = 'heroicons-solid:trending-up';
+              produto.classIcon = 'text-green-500';
+              produto.classPercentage = 'font-medium text-green-500';
+            } else {
+              produto.isPositive = false;
+              produto.isNeutral = true;
+              produto.percentage = 0;
+              produto.icon = 'heroicons-solid:trending-down';
+              produto.classIcon = 'text-red-500';
+              produto.classPercentage = 'font-medium text-red-500';
             }
-            objAux.productions.series[0].data?.push(total);
+          } else {
+            produto.isPositive = false;
+            produto.isNeutral = false;
+            produto.percentage = null;
+            produto.icon = 'heroicons-solid:trending-down';
+            produto.classIcon = 'text-red-500';
+            produto.classPercentage = 'font-medium text-red-500';
           }
-        } else {
+          break;
+        }
+      }
+    }
+    
+    return res.status(200).json({
+      daysAgo30: arrayAux,
+      daysAgo60: arrayAux60DaysAgo
+    });
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+});
+
+function calcPercentage(x, y) {
+  return (x / y) * 100;
+}
+
+function getDaysAgoProductions(produtosEstoqueMes) {
+  const arrayAux = [];
+  for (let i = 0; i < produtosEstoqueMes?.length; i++) {
+    const produto = produtosEstoqueMes[i];
+    const objAux = {
+      artigo: produto?.artigo,
+      id: produto?.id,
+      metrosTotal: 0,
+      productions: {
+        labels: [],
+        series: [
+          {
+            name: "Total (m)",
+            data: [
+            ]
+          }
+        ],
+      }
+    }
+    for (let j = 0; j < produto?.estoque?.length; j++) {
+      const produtoEstoque = produto.estoque[j];
+      if (objAux.productions.labels.length > 0) {
+        if (!objAux.productions.labels.includes(formatDate(produtoEstoque.created_at))) {
           objAux.productions.labels.push(formatDate(produtoEstoque.created_at));
           let total = 0;
           for (let k = 0; k < produto.estoque.length; k++) {
@@ -347,24 +420,31 @@ app.get('/api/dashboard/production', async (req, res) => {
               total += item.metros;
             }
           }
-          objAux.productions.series[0].data.push(total);
+          objAux.productions.series[0].data?.push(total);
         }
+      } else {
+        objAux.productions.labels.push(formatDate(produtoEstoque.created_at));
+        let total = 0;
+        for (let k = 0; k < produto.estoque.length; k++) {
+          const item = produto.estoque[k];
+          if (formatDate(item.created_at) === formatDate(produtoEstoque.created_at)) {
+            total += item.metros;
+          }
+        }
+        objAux.productions.series[0].data.push(total);
       }
-      let totalAux = 0;
-      for(let n = 0; n < objAux.productions.series[0].data?.length; n++) {
-        totalAux += objAux.productions.series[0].data[n];
-      }
-
-      objAux.metrosTotal = totalAux;
-      arrayAux.push(objAux);
     }
-    return res.status(200).json(arrayAux);
+    let totalAux = 0;
+    for(let n = 0; n < objAux.productions.series[0].data?.length; n++) {
+      totalAux += objAux.productions.series[0].data[n];
+    }
 
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({ error: err });
+    objAux.metrosTotal = totalAux;
+    arrayAux.push(objAux);
   }
-});
+
+  return arrayAux;
+}
 
 function formatDate(date) {
   return `${date.getDate()}/${(date.getMonth() + 1) < 9 ? `0${(date.getMonth() + 1).toString()}` : (date.getMonth() + 1).toString()}/${date.getFullYear()}`;

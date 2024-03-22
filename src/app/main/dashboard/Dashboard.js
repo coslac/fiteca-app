@@ -6,6 +6,7 @@ import FusePageSimple from '@fuse/core/FusePageSimple';
 import axios from "axios";
 import getConfigAPI from 'src/config';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -58,7 +59,7 @@ const Dashboard = () => {
                 const res = await axios.get(`${apiURL}/dashboard/production`);
                 console.log('res: ', res);
                 if(res && res.status === 200) {
-                    setDataDash(res.data);
+                    setDataDash(res.data.daysAgo30);
                 }
             } catch(err) {
                 console.log(err)
@@ -73,16 +74,25 @@ const Dashboard = () => {
         <FusePageSimple
             content={
                 <motion.div
-                            className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-32 w-full p-24 md:p-32"
-                            variants={container}
+                            className="gap-32 w-full p-24 md:p-32"
                             initial="hidden"
                             animate="show"
                         >
                             <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <div className="w-full mt-16 sm:col-span-3">
+                                        <Typography className="text-2xl font-semibold tracking-tight leading-6">
+                                            DESEMPENHO DE PRODUÇÃO
+                                        </Typography>
+                                        <Typography className="font-medium tracking-tight" color="text.secondary">
+                                            Últimos 30 dias
+                                        </Typography>
+                                    </div>
+                                </Grid>
                             {
-                                dataDash?.map((data) => (
-                                    <Grid item xs={6}>
-                                    <motion.div variants={item} className="sm:col-span-2 lg:col-span-1 ">
+                                dataDash?.map((data, index) => (
+                                    <Grid item key={`${data?.artigo}-${index}`} xs={4}>
+                                    <motion.div variants={item} className="" style={{opacity: 1, transform: 'none'}}>
                                         <ProductionWidget props={data} />
                                     </motion.div>
                                     </Grid>
