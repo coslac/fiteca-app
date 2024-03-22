@@ -276,6 +276,38 @@ app.get('/api/romaneio/artigos', async (req, res) => {
   }
 });
 
+app.get('/api/dashboard/production', async (req, res) => {
+  try {
+    const response = await prisma.produto.findMany({
+      where: {
+        estoque: {
+          some: {
+            created_at: {
+              lte: new Date(`${new Date().getFullYear}-${new Date().getMonth()}-${new Date().getDay()}`),
+              gte: new Date(`${new Date().getFullYear}-${new Date().getMonth()}-01`)
+            }
+          }
+        }
+      },
+      include: {
+        estoque: true
+      }
+    });
+
+    console.log('response dashboard: ', response);
+
+    if(!response) {
+      return res.status(500).json({ error: 'Erro ao buscar dados' });
+    }
+
+    return res.status(200).json(response);
+
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+});
+
 app.put('/api/item-estoque/:id/baixa', async (req, res) => {
   try {
     const { id } = req.params;
