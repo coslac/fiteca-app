@@ -18,9 +18,10 @@ import EstoqueProdutoItemConfig from '../main/estoque-produto-item/EstoqueProdut
 import PedidosConfig from '../main/pedidos/PedidosConfig';
 import PedidoConfig from '../main/pedido/PedidoConfig';
 import DashboardConfig from '../main/dashboard/DashboardConfig';
+import profileAppConfig from '../main/profile/profileAppConfig';
 
 
-const routeConfigs = [DashboardConfig, PedidosConfig, PedidoConfig, ProdutoConfig, ProdutosConfig, EstoqueListConfig, EstoqueConfig, EstoqueProdutoItemConfig, PacientesConfig, PacienteConfig, MinhaContaConfig, CheckoutConfig, SolicitacaoConfig];
+const routeConfigs = [profileAppConfig, DashboardConfig, PedidosConfig, PedidoConfig, ProdutoConfig, ProdutosConfig, EstoqueListConfig, EstoqueConfig, EstoqueProdutoItemConfig, PacientesConfig, PacienteConfig, MinhaContaConfig, CheckoutConfig, SolicitacaoConfig];
 
 const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),

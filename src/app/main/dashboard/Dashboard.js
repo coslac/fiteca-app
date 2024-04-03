@@ -7,6 +7,7 @@ import axios from "axios";
 import getConfigAPI from 'src/config';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { usePDF } from 'react-to-pdf';
 
 const apiURL = getConfigAPI().API_URL;
 
@@ -53,6 +54,8 @@ const item = {
 };
 const Dashboard = () => {
     const [dataDash, setDataDash] = useState([]);
+    const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
+
     useEffect(() => {
         async function getDataWidgets() {
             try {
@@ -77,6 +80,7 @@ const Dashboard = () => {
                             className="gap-32 w-full p-24 md:p-32"
                             initial="hidden"
                             animate="show"
+                            ref={targetRef}
                         >
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -88,6 +92,9 @@ const Dashboard = () => {
                                             Últimos 30 dias
                                         </Typography>
                                     </div>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <button onClick={() => toPDF()}>Download PDF</button>
                                 </Grid>
                             {
                                 dataDash?.map((data, index) => (

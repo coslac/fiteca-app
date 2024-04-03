@@ -12,7 +12,7 @@ const navigationConfig = [
     id: 'dashboard',
     title: 'Dashboard',
     type: 'item',
-    icon: 'heroicons-outline:view-list',
+    icon: 'heroicons-outline:chart-pie',
     url: '/',
   },
   {
@@ -71,7 +71,14 @@ const navigationConfig = [
         title: 'Minha Conta',
         type: 'item',
         icon: 'heroicons-outline:user',
-        url: '/minha-conta',
+        url: '/conta',
+      },
+      {
+        id: 'configuracoes',
+        title: 'Configurações',
+        type: 'item',
+        icon: 'heroicons-outline:cog',
+        url: '/configuracoes',
       },
       {
         id: 'sair',

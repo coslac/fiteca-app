@@ -6,6 +6,7 @@
     "type": "commonjs",
     "dependencies": {
         "@auth0/auth0-react": "^2.2.1",
+        "@ironsoftware/ironpdf": "^2024.3.1",
         "@prisma/client": "^5.3.1",
         "@prisma/extension-accelerate": "^1.0.0",
         "@types/auth0": "^3.3.6",

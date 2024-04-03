@@ -118,6 +118,35 @@ app.get('/api/pedidos', async (req, res) => {
   }
 });
 
+app.post('/api/email-server/transporter', async (req, res) => {
+  try {
+    const data = req.body;
+
+    if(!data) {
+      return res.status(400).json({ error: 'body param is required' });
+    }
+
+    const transporter = await prisma.sMTPTransporter.create({
+      data: {
+        appPass: data?.appPass,
+        email: data?.email,
+        host: data?.host,
+        port: data?.port,
+        secure: data?.secure,
+      },
+    });
+
+    if(!transporter) {
+      return res.status(500).json({ error: 'Erro ao cadastrar transporter+' });
+    }
+
+    return res.status(201).json(transporter);
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
 app.post('/api/pedido', async (req, res) => {
   try {
     const data = req.body;

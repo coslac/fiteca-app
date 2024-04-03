@@ -8,90 +8,90 @@ datasource db {
 }
 
 model Produto {
-  id              String             @id @default(uuid())
-  artigo          String             @unique
-  descricao       String?
-  largura         Float?
-  anexos         S3ProdutoFile[]
-  imagem          String?
-  criado_por      String?
-  alterado_por    String?
-  ativo           Boolean            @default(true)
-  created_at      DateTime           @default(now()) @db.Timestamptz
-  updated_at      DateTime           @updatedAt @db.Timestamptz
-  estoque         ProdutoEstoque[]
-  pedidos ProdutoPedido[]
-  valorMetro      Float?
+  id           String           @id @default(uuid())
+  artigo       String           @unique
+  descricao    String?
+  largura      Float?
+  imagem       String?
+  criado_por   String?
+  alterado_por String?
+  ativo        Boolean          @default(true)
+  created_at   DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime         @updatedAt @db.Timestamptz(6)
+  valorMetro   Float?
+  estoque      ProdutoEstoque[]
+  pedidos      ProdutoPedido[]
+  anexos       S3ProdutoFile[]
 }
 
 model ProdutoEstoque {
-  id              String             @id @default(uuid())
-  produto_id      String
-  numTear         Int?
-  numRolo         Int?
-  tipoTear        String?
-  metros          Float?
-  revisor         String?
-  cliente         String?
-  criado_por      String?
-  alterado_por    String?
-  ativo           Boolean            @default(true)
-  defeito           Boolean            @default(false)
-  created_at      DateTime           @default(now()) @db.Timestamptz
-  data            DateTime? @db.Timestamptz
-  updated_at      DateTime           @updatedAt @db.Timestamptz
-  produto         Produto            @relation(fields: [produto_id], references: [id])
-  status          String @default("Em revisão")
-  qrCode          S3QRCodeFile?
-  itemsRomaneio  ItemRomaneio[]
+  id            String         @id @default(uuid())
+  produto_id    String
+  numTear       Int?
+  numRolo       Int?
+  tipoTear      String?
+  metros        Float?
+  revisor       String?
+  cliente       String?
+  criado_por    String?
+  alterado_por  String?
+  ativo         Boolean        @default(true)
+  defeito       Boolean        @default(false)
+  created_at    DateTime       @default(now()) @db.Timestamptz(6)
+  data          DateTime?      @db.Timestamptz(6)
+  updated_at    DateTime       @updatedAt @db.Timestamptz(6)
+  status        String         @default("Em revisão")
+  itemsRomaneio ItemRomaneio[]
+  produto       Produto        @relation(fields: [produto_id], references: [id])
+  qrCode        S3QRCodeFile?
 }
 
 model ItemRomaneio {
-  id              String             @id @default(uuid())
-  metros Float?
-  rolo_id String
-  rolo ProdutoEstoque @relation(fields: [rolo_id], references: [id])
+  id               String         @id @default(uuid())
+  metros           Float?
+  rolo_id          String
   produtoPedido_id String
-  produtoPedido ProdutoPedido @relation(fields: [produtoPedido_id], references: [id])
+  produtoPedido    ProdutoPedido  @relation(fields: [produtoPedido_id], references: [id])
+  rolo             ProdutoEstoque @relation(fields: [rolo_id], references: [id])
 }
 
 model ProdutoPedido {
-  id              String             @id @default(uuid())
-  pedido_id       String
-  metros      Float?
+  id         String         @id @default(uuid())
+  pedido_id  String
+  metros     Float?
   valorTotal Float?
   valorMetro Float?
-  produto_id      String
-  produto         Produto            @relation(fields: [produto_id], references: [id])
-  created_at      DateTime           @default(now()) @db.Timestamptz
-  updated_at      DateTime           @updatedAt @db.Timestamptz
-  romaneio        ItemRomaneio[]
-  cliente         Pedido             @relation(fields: [pedido_id], references: [id])
+  produto_id String
+  created_at DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at DateTime       @updatedAt @db.Timestamptz(6)
+  romaneio   ItemRomaneio[]
+  cliente    Pedido         @relation(fields: [pedido_id], references: [id])
+  produto    Produto        @relation(fields: [produto_id], references: [id])
 }
 
 model Pedido {
-  id              String             @id @default(uuid())
-  nome         String
-  endereco         String?
-  numero String?
-  complemento String?
-  bairro String?
-  cidade String?
-  estado String?
-  cep String?
-  tel String?
-  cnpjCpf String?
-  inscEst String?
-  condPagamento String?
-  valorTotal Float?
-  status String @default("Em andamento")
-  created_at      DateTime           @default(now()) @db.Timestamptz
-  updated_at      DateTime           @updatedAt @db.Timestamptz
-  produtosPedido        ProdutoPedido[]
+  id             String          @id @default(uuid())
+  nome           String
+  endereco       String?
+  numero         String?
+  complemento    String?
+  bairro         String?
+  cidade         String?
+  estado         String?
+  cep            String?
+  tel            String?
+  cnpjCpf        String?
+  inscEst        String?
+  condPagamento  String?
+  valorTotal     Float?
+  status         String          @default("Em andamento")
+  created_at     DateTime        @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime        @updatedAt @db.Timestamptz(6)
+  produtosPedido ProdutoPedido[]
 }
 
 model S3ProdutoFile {
-  id           String               @id @default(uuid())
+  id           String   @id @default(uuid())
   key          String
   url          String?
   bucket       String
@@ -100,22 +100,47 @@ model S3ProdutoFile {
   produto_id   String
   criado_por   String?
   alterado_por String?
-  created_at   DateTime             @default(now()) @db.Timestamptz
-  updated_at   DateTime             @updatedAt @db.Timestamptz
-  produto      Produto @relation(fields: [produto_id], references: [id])
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @updatedAt @db.Timestamptz(6)
+  produto      Produto  @relation(fields: [produto_id], references: [id])
 }
 
 model S3QRCodeFile {
-  id           String               @id @default(uuid())
-  key          String
-  url          String?
-  bucket       String
-  region       String
-  tipo         String?
-  produtoEstoque_id   String @unique
-  criado_por   String?
-  alterado_por String?
-  created_at   DateTime             @default(now()) @db.Timestamptz
-  updated_at   DateTime             @updatedAt @db.Timestamptz
-  produtoEstoque      ProdutoEstoque @relation(fields: [produtoEstoque_id], references: [id])
+  id                String         @id @default(uuid())
+  key               String
+  url               String?
+  bucket            String
+  region            String
+  tipo              String?
+  produtoEstoque_id String         @unique
+  criado_por        String?
+  alterado_por      String?
+  created_at        DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime       @updatedAt @db.Timestamptz(6)
+  produtoEstoque    ProdutoEstoque @relation(fields: [produtoEstoque_id], references: [id])
+}
+
+model ConfigServidorEmail {
+  id              String           @id
+  descricao       String?
+  cronTrigger     String?
+  transporter_id  String?
+  destinatarios   String[]
+  ativo           Boolean          @default(true)
+  created_at      DateTime         @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime         @db.Timestamptz(6)
+  SMTPTransporter SMTPTransporter? @relation(fields: [transporter_id], references: [id])
+}
+
+model SMTPTransporter {
+  id                  String                @id
+  email               String
+  appPass             String
+  host                String?
+  port                Int?
+  secure              Boolean?
+  ativo               Boolean               @default(true)
+  created_at          DateTime              @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime              @db.Timestamptz(6)
+  ConfigServidorEmail ConfigServidorEmail[]
 }
